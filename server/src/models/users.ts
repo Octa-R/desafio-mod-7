@@ -1,6 +1,5 @@
 import { Model, DataTypes } from 'sequelize';
-
-import { sequelize } from './connection';
+import { sequelize } from '../db/connection';
 
 class User extends Model {
   declare firstname: string;

@@ -36,7 +36,7 @@ class NavBar extends HTMLElement {
 
   render() {
     this.innerHTML = `
-    <nav class="bg-gray-800 fixed w-full top-0 z-50">
+    <nav class="bg-zinc-800 fixed w-full top-0 z-50">
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
       <div class="relative flex h-16 items-center justify-between">
         <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -44,7 +44,7 @@ class NavBar extends HTMLElement {
           <button
             type="button"
             id="mobile-menu-button"
-            class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
+            class="inline-flex items-center justify-center rounded-md p-2 text-zinc-400 hover:bg-zinc-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
             aria-controls="mobile-menu"
             aria-expanded="false"
           >
@@ -111,21 +111,21 @@ class NavBar extends HTMLElement {
             <div class="flex space-x-4">
               <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
               <a
-                href="#"
-                class="bg-gray-900 text-white rounded-md px-3 py-2 text-sm font-medium"
+                href="/mis-datos"
+                class="bg-zinc-900 text-white rounded-md px-3 py-2 text-sm font-medium"
                 aria-current="page"
                 >Mis datos</a
               >
   
               <a
-                href="#"
-                class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                href="/mis-mascotas-reportadas"
+                class="text-zinc-300 hover:bg-zinc-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                 >Mis mascotas reportadas</a
               >
   
               <a
-                href="#"
-                class="text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
+                href="/reportar-mascota"
+                class="text-zinc-300 hover:bg-zinc-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium"
                 >Reportar mascotas</a
               >
             </div>
@@ -141,7 +141,7 @@ class NavBar extends HTMLElement {
             <div>
               <button
                 type="button"
-                class="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                class="flex rounded-full bg-zinc-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-zinc-800"
                 id="user-menu-button"
                 aria-expanded="false"
                 aria-haspopup="true"
@@ -175,7 +175,7 @@ class NavBar extends HTMLElement {
               <!-- Active: "bg-gray-100", Not Active: "" -->
               <a
                 href="#"
-                class="block px-4 py-2 text-sm text-gray-700"
+                class="block px-4 py-2 text-sm text-zinc-700"
                 role="menuitem"
                 tabindex="-1"
                 id="user-menu-item-0"
@@ -183,7 +183,7 @@ class NavBar extends HTMLElement {
               >
               <a
                 href="#"
-                class="block px-4 py-2 text-sm text-gray-700"
+                class="block px-4 py-2 text-sm text-zinc-700"
                 role="menuitem"
                 tabindex="-1"
                 id="user-menu-item-1"
@@ -191,7 +191,7 @@ class NavBar extends HTMLElement {
               >
               <a
                 href="#"
-                class="block px-4 py-2 text-sm text-gray-700"
+                class="block px-4 py-2 text-sm text-zinc-700"
                 role="menuitem"
                 tabindex="-1"
                 id="user-menu-item-2"
@@ -208,21 +208,21 @@ class NavBar extends HTMLElement {
       <div class="space-y-1 px-2 pt-2 pb-3">
         <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
         <a
-          href="#"
-          class="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium"
+          href="/mis-datos"
+          class="bg-zinc-900 text-white block rounded-md px-3 py-2 text-base font-medium"
           aria-current="page"
           >Mis datos</a
         >
   
         <a
-          href="#"
-          class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
+          href="/mis-mascotas-reportadas"
+          class="text-zinc-300 hover:bg-zinc-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
           >Mis mascotas reportadas</a
         >
   
         <a
-          href="#"
-          class="text-gray-300 hover:bg-gray-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
+          href="/reportar-mascota"
+          class="text-zinc-300 hover:bg-zinc-700 hover:text-white block rounded-md px-3 py-2 text-base font-medium"
           >Reportar mascotas</a
         >
   

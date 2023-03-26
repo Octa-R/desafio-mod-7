@@ -1,4 +1,4 @@
-class RegisterPage extends HTMLElement {
+class ReportarMascotaPage extends HTMLElement {
   constructor() {
     super();
   }
@@ -13,7 +13,7 @@ class RegisterPage extends HTMLElement {
     <div class="container mx-auto px-12 h-screen flex flex-col space-y-8 py-16">
 
       <p class="text-8xl text-center font-bold text-orange-600 subpixel-antialiased my-8">
-        Pet Finder
+        Reportar Mascota
       </p>
 
       <p class="text-2xl text-justify">
@@ -32,4 +32,4 @@ class RegisterPage extends HTMLElement {
   }
 }
 
-export { RegisterPage }
+export { ReportarMascotaPage }

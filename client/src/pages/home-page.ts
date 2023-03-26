@@ -10,7 +10,7 @@ class HomePage extends HTMLElement {
   render() {
     this.innerHTML = `
     <nav-bar></nav-bar>
-    <div class="container mx-auto px-12 py-4 h-screen flex flex-col space-y-8 py-16">
+    <div class="container mx-auto px-12 h-screen flex flex-col justify-center gap-y-4 py-16">
 
       <p class="text-8xl text-center font-bold text-orange-600 subpixel-antialiased my-8">
         Pet Finder

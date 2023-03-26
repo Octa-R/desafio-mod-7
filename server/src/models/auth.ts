@@ -1,6 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../db";
-import { hash } from "../utils"
+import { hash } from "../utils/hash"
 class Auth extends Model {
   declare email: string;
   declare password: string;

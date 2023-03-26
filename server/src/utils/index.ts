@@ -1,9 +1,4 @@
-import * as crypto from "crypto"
-function hash(string) {
-  return crypto
-    .createHash("sha256")
-    .update(string)
-    .digest("hex")
-}
+import { hash } from "./hash"
+import { authMiddleWare } from "./authMiddleware"
 
-export { hash }
+export { hash, authMiddleWare }

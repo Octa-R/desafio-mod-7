@@ -94,17 +94,21 @@ class NavBar extends HTMLElement {
         <div
           class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start"
         >
-          <div class="flex flex-shrink-0 items-center">
+          <div class="flex flex-shrink-0 items-center hidden">
+            <a href="/">
             <img
               class="block h-8 w-auto lg:hidden"
               src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
               alt="Your Company"
             />
+            </a>
+            <a href="/">
             <img
               class="hidden h-8 w-auto lg:block"
               src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=500"
               alt="Your Company"
             />
+            </a>
           </div>
           <div class="hidden sm:ml-6 sm:block">
 
@@ -137,7 +141,7 @@ class NavBar extends HTMLElement {
           
   
           <!-- Profile dropdown -->
-          <div class="relative ml-3">
+          <div class="relative ml-3 hidden">
             <div>
               <button
                 type="button"

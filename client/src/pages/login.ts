@@ -1,3 +1,4 @@
+import { state } from "../state";
 class LoginPage extends HTMLElement {
   constructor() {
     super();
@@ -6,18 +7,26 @@ class LoginPage extends HTMLElement {
   connectedCallback() {
     this.render();
   }
-  // container mx-auto px-12 h-screen flex flex-col justify-center gap-y-4 py-16
-  //container w-screen px-12 h-screen flex flex-col justify-center gap-y-4 py-16 bg-gray-500
+  addSubmitListener() {
+
+    const form = <HTMLFormElement>this.querySelector('#login-form');
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = this.querySelector<HTMLInputElement>("#email")?.value;
+      const password = this.querySelector<HTMLInputElement>("#password")?.value;
+      state.signin({ email, password })
+    });
+  }
   render() {
     this.innerHTML = `
     <nav-bar></nav-bar>
-    <div class="container mx-autopx-12 h-screen flex flex-col justify-center gap-y-4 py-16">
+    <div class="container mx-autopx-12 h-screen flex flex-col justify-center content-center py-16">
 
-      <p class="text-4xl text-center font-bold text-orange-600 subpixel-antialiased my-8">
+      <p class="text-4xl text-center font-bold text-orange-600 subpixel-antialiased my-4">
         Iniciar Sesión
       </p>
 
-      <div class="container mx-auto mt-8 ">
+      <div class="container mx-auto">
         <div class="max-w-md mx-auto bg-transparent p-8 ">
             <form id="login-form">
                 <div class="mb-4">
@@ -43,6 +52,7 @@ class LoginPage extends HTMLElement {
     </div>
     </div>
     `;
+    this.addSubmitListener()
   }
 }
 

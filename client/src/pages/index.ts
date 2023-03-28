@@ -11,5 +11,3 @@ customElements.define("login-page", LoginPage)
 customElements.define("mis-datos", MisDatosPage)
 customElements.define("mis-mascotas-reportadas", MisMascotasReportadasPage)
 customElements.define("reportar-mascota", ReportarMascotaPage)
-
-export { HomePage, LoginPage, RegisterPage }

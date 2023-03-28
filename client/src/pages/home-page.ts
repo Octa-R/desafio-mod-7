@@ -1,3 +1,4 @@
+import { state } from "../state";
 class HomePage extends HTMLElement {
   constructor() {
     super();
@@ -5,6 +6,12 @@ class HomePage extends HTMLElement {
 
   connectedCallback() {
     this.render();
+  }
+
+  addListeners() {
+    this.querySelector("#geoloc-btn")?.addEventListener("click", (e) => {
+      state.setCurrentPosition()
+    })
   }
 
   render() {
@@ -20,15 +27,16 @@ class HomePage extends HTMLElement {
         Encontrá y reporta mascotas perdidas cerca de tu ubicación
       </p>
 
-      <button class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-3 px-8 rounded">
+      <button class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-3 px-8 rounded" id="geoloc-btn">
         Dar mi ubicacion actual
       </button>
   
-      <button class="bg-green-600 hover:bg-green-800 text-white font-bold py-3 px-8 rounded">
+      <button class="bg-green-600 hover:bg-green-800 text-white font-bold py-3 px-8 rounded" id="como-func-btn">
         Cómo funciona Pet Finder?
       </button>
     </div>
     `;
+    this.addListeners()
   }
 }
 

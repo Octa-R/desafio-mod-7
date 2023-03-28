@@ -8,8 +8,9 @@ interface State {
   getState: () => any
   setState: (newState: any) => void
   subscribe: (cb: () => any) => void
-  signup: (userData: any) => void
-  signin: (userData: any) => void
+  signup: (userData: any) => Promise<boolean>
+  signin: (userData: any) => Promise<boolean>
+  setCurrentPosition: () => void
 }
 
 class CustomStorage {
@@ -28,7 +29,9 @@ class CustomStorage {
 
 const state: State = {
   data: {
-    userToken: ""
+    userToken: "",
+    errorMessage: "",
+    currentPosition: ""
   },
   listeners: [],
   storage: new CustomStorage(),
@@ -47,6 +50,7 @@ const state: State = {
     return data;
   },
   setState(newState) {
+    console.log("soy el state eh cambiado", newState)
     this.data = newState;
     this.storage.save("app-state", this.data);
 
@@ -60,12 +64,21 @@ const state: State = {
   async signup(userData) {
     if (userData.password != userData.passwordConfirm) {
       console.log("err");
-      return
+      return false
     }
-    const res = this.x.post("/auth/signup", { ...userData })
-    console.log(res);
+    try {
+      const res = await this.x.post("/auth/signup", { ...userData })
+      console.log(res);
 
-
+      return true
+    } catch (error: any) {
+      const msg = error.response.data.message
+      console.log(msg);
+      const cs = this.getState()
+      cs.errorMessage = msg
+      this.setState(cs)
+      return false
+    }
   },
   async signin(userData) {
     try {
@@ -73,12 +86,41 @@ const state: State = {
       //se setea el token
       this.x.defaults.headers.common['Authorization'] = res.data.token
       console.log("el usuario se ha autenticado correctamente");
-
-
+      return true
     } catch (error: any) {
       const msg = error.response.data.message
       console.log(msg);
+      const cs = this.getState()
+      cs.errorMessage = msg
+      this.setState(cs)
+      return false
     }
+  },
+  setCurrentPosition() {
+    const success = (pos: any) => {
+      const crd = pos.coords;
+      const cs = this.getState()
+      cs.currentPosition = {
+        lat: crd.latitude,
+        lng: crd.longitude,
+        acc: crd.accuracy
+      }
+      this.setState(cs)
+    }
+
+    const error = (err: any) => {
+      console.warn(`ERROR(${err.code}): ${err.message}`);
+    }
+
+    const options = {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0,
+    };
+
+    navigator
+      .geolocation
+      .getCurrentPosition(success, error, options);
   }
 }
 

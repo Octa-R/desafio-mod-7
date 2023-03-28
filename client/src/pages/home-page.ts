@@ -1,3 +1,4 @@
+import { Router } from "@vaadin/router";
 import { state } from "../state";
 class HomePage extends HTMLElement {
   constructor() {
@@ -9,8 +10,13 @@ class HomePage extends HTMLElement {
   }
 
   addListeners() {
-    this.querySelector("#geoloc-btn")?.addEventListener("click", (e) => {
-      state.setCurrentPosition()
+    this.querySelector("#geoloc-btn")?.addEventListener("click", () => {
+      state.setCurrentPosition().then(res => {
+        console.log(res)
+        if (res) {
+          Router.go("/home-mascotas")
+        }
+      })
     })
   }
 

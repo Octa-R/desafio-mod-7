@@ -1,3 +1,4 @@
+import { Router } from "@vaadin/router";
 import axios from "axios"
 interface State {
   listeners: Array<() => void>;
@@ -10,7 +11,7 @@ interface State {
   subscribe: (cb: () => any) => void
   signup: (userData: any) => Promise<boolean>
   signin: (userData: any) => Promise<boolean>
-  setCurrentPosition: () => void
+  setCurrentPosition: () => Promise<any>
 }
 
 class CustomStorage {
@@ -96,7 +97,7 @@ const state: State = {
       return false
     }
   },
-  setCurrentPosition() {
+  async setCurrentPosition() {
     const success = (pos: any) => {
       const crd = pos.coords;
       const cs = this.getState()
@@ -106,11 +107,13 @@ const state: State = {
         acc: crd.accuracy
       }
       this.setState(cs)
+      Router.go("/home-mascotas")
     }
 
     const error = (err: any) => {
       console.warn(`ERROR(${err.code}): ${err.message}`);
     }
+
 
     const options = {
       enableHighAccuracy: true,

@@ -24,9 +24,21 @@ class Card extends HTMLElement {
   }
   render() {
     this.innerHTML = `
-      <div class="card">
-       <h2 class="title">Mascota: ${this.petId} (Click me)</h2>
+      <div class="rounded shadow-lg overflow-hidden bg-gray-700 p-4">
+        <div class="flex flex-col">
+          <img src="https://picsum.photos/id/237/300/130" alt="Foto de mascota perdida" class="col-span-2 w-full h-full object-cover rounded">
+          <h2 class="font-bold title text-xl text-gray-100">
+            Mascota: ${this.petId} (Click me)
+          </h2>
+          <p class="text-gray-100">
+            Locación
+          </p>
+          <button class="ml-auto bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded">
+            Reportar
+          </button>
+        </div>
       </div>
+
     `;
     this.listeners();
   }

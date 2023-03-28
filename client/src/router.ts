@@ -8,4 +8,5 @@ router.setRoutes([
   { path: "/mis-datos", component: "mis-datos" },
   { path: "/mis-mascotas-reportadas", component: "mis-mascotas-reportadas" },
   { path: "/reportar-mascota", component: "reportar-mascota" },
+  { path: "/home-mascotas", component: "home-mascotas" }
 ]);

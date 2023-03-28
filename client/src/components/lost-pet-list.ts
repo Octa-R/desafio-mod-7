@@ -11,7 +11,7 @@ class List extends HTMLElement {
   render() {
     const ids = [1, 2, 3, 4];
     this.innerHTML = `
-      <div class="list">
+      <div class="list flex flex-col gap-4">
        ${ids
         .map((id) => `<lost-pet-card pet-id=${id}></lost-pet-card>`)
         .join("")}

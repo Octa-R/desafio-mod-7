@@ -12,7 +12,8 @@ LostPet.init({
   name: DataTypes.STRING,
   lat: DataTypes.FLOAT,
   lng: DataTypes.FLOAT,
-  pictureUrl: DataTypes.STRING
+  pictureUrl: DataTypes.STRING,
+  finded: DataTypes.BOOLEAN
 }, { sequelize, modelName: 'lostpet' });
 
 export { LostPet };

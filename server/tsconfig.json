@@ -4,7 +4,8 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "module": "CommonJS",
-    "outDir": "dist"
+    "outDir": "dist",
+    "types": ["node"]
   },
   "files": ["./index.ts"]
 }

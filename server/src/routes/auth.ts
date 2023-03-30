@@ -8,7 +8,7 @@ auth.post("/signin", async (req, res) => {
     const response = await authController.login(req.body)
     res.json(response)
   } catch (error) {
-    res.status(400).json({ message: error.message })
+    res.status(401).json({ message: error.message })
   }
 })
 //crear cuenta sign up
@@ -21,7 +21,7 @@ auth.post("/signup", async (req, res) => {
     const response = await authController.register(req.body)
     res.json(response)
   } catch (error) {
-    res.status(400).json({ message: error.message })
+    res.status(401).json({ message: error.message })
   }
 })
 
@@ -30,7 +30,7 @@ auth.get("/me", authMiddleWare, async (req, res) => {
     const response = await authController.me(req.body)
     res.json(response)
   } catch (error) {
-    res.status(400).json({ message: error.message })
+    res.status(401).json({ message: error.message })
   }
 })
 

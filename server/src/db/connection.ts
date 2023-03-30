@@ -1,7 +1,4 @@
 import { Sequelize } from "sequelize";
-
-require('dotenv').config();
-
 const url = process.env.DATABASE_URL || "";
 const sequelize = new Sequelize(url);
 

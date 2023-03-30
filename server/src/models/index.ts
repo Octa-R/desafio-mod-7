@@ -12,4 +12,4 @@ SeenPet.belongsTo(LostPet)
 Auth.belongsTo(User);
 User.hasOne(Auth);
 
-export { User, Auth };
+export { User, Auth, LostPet, SeenPet };

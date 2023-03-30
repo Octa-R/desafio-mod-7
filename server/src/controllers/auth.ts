@@ -30,7 +30,7 @@ async function login(userData) {
     email: auth.get("email")
   },
     process.env.SECRET)
-  return { token }
+  return { token, userId: auth.get("userId") }
 
 }
 

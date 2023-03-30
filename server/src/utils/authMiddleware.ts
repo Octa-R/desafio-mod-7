@@ -1,6 +1,5 @@
 import * as bearerToken from "bearer-token"
 import * as jwt from "jsonwebtoken"
-const SECRET = "secret"
 
 function authMiddleWare(req, res, next) {
   bearerToken(req, (err, token) => {
@@ -8,7 +7,7 @@ function authMiddleWare(req, res, next) {
       res.status(401).json({ err })
     }
     try {
-      const decoded = jwt.verify(token, SECRET)
+      const decoded = jwt.verify(token, process.env.SECRET)
       req._user = decoded
       next()
     } catch (err) {

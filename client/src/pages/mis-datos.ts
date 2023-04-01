@@ -1,34 +1,51 @@
+import { Router } from "@vaadin/router";
+import { state } from "../state";
+
 class MisDatosPage extends HTMLElement {
   constructor() {
     super();
+    const cs = state.getState()
+
+    if (!cs.userIsLoggedIn) {
+      Router.go("/login")
+    }
   }
 
   connectedCallback() {
     this.render();
   }
+  listeners() {
+    const container = this.querySelector(".container")
+    container?.addEventListener("change-data", () => {
+      Router.go("/mis-datos-personales")
 
+    })
+    container?.addEventListener("change-password", () => {
+      Router.go("/cambiar-password")
+    })
+  }
   render() {
+    const cs = state.getState()
     this.innerHTML = `
-    <nav-bar></nav-bar>
-    <div class="container mx-auto px-12 h-screen flex flex-col space-y-8 py-16">
+    <nav-bar activeMenu="mis-datos"></nav-bar>
+    <div class="container mx-auto px-12 h-screen flex flex-col justify-center gap-y-4 py-16 items-center">
 
-      <p class="text-8xl text-center font-bold text-orange-600 subpixel-antialiased my-8">
-        Pet Finder
+      <p class="text-4xl text-center font-bold subpixel-antialiased self-center mb-auto mt-24">
+        Mis Datos
       </p>
 
-      <p class="text-2xl text-justify">
-        Encontrá y reporta mascotas perdidas cerca de tu ubicación
-      </p>
+      <x-btn name="change-data" text="Modificar datos personales"></x-btn>
 
-      <button class="bg-blue-600 hover:bg-blue-800 text-white font-bold py-3 px-8 rounded">
-        Dar mi ubicacion actual
-      </button>
-  
-      <button class="bg-green-600 hover:bg-green-800 text-white font-bold py-3 px-8 rounded">
-        Cómo funciona Pet Finder?
-      </button>
+      <x-btn name="change-password" text="Modificar contraseña" ></x-btn>
+
+      <div class="mt-auto w-full text-center" >
+        <p class="font-bold text-xl ">${cs.email}</p>
+        <p class="font-bold text-xl cursor-pointer text-indigo-700 hover:text-indigo-800">Cerrar sesión</p>
+      </div>
+
     </div>
     `;
+    this.listeners()
   }
 }
 

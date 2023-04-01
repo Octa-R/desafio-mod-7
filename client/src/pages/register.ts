@@ -1,3 +1,4 @@
+import { Router } from "@vaadin/router";
 import { state } from "../state"
 class RegisterPage extends HTMLElement {
   constructor() {
@@ -15,13 +16,21 @@ class RegisterPage extends HTMLElement {
       const email = this.querySelector<HTMLInputElement>("#email")?.value;
       const password = this.querySelector<HTMLInputElement>("#password")?.value;
       const passwordConfirm = this.querySelector<HTMLInputElement>("#password-confirm")?.value;
-      state.signup({ email, password, passwordConfirm })
+      const cs = state.getState()
+      if (password !== passwordConfirm) {
+        console.warn("contrasenias diferentes")
+        return
+      }
+      cs.email = email
+      cs.password = password
+      state.setState(state)
+      Router.go("/mis-datos-personales")
     });
   }
   render() {
     this.innerHTML = `
     <nav-bar></nav-bar>
-    <div class="container mx-autopx-12 h-screen flex flex-col justify-center content-center py-16">
+    <div class="container mx-auto px-12 h-screen flex flex-col justify-center content-center py-16">
 
       <p class="text-4xl text-center font-bold text-orange-600 subpixel-antialiased my-4">
         Registrarse

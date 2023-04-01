@@ -5,13 +5,17 @@ interface State {
   data: any
   storage: CustomStorage
   x: any
+
   init: () => void
   getState: () => any
   setState: (newState: any) => void
   subscribe: (cb: () => any) => void
   signup: (userData: any) => Promise<boolean>
   signin: (userData: any) => Promise<boolean>
+  logout: () => Promise<boolean>
   setCurrentPosition: () => Promise<any>
+  getDatosPersonales: () => any
+  updateDatosPersonales: (props: { name: string, localidad: string }) => any
 }
 
 class CustomStorage {
@@ -32,7 +36,10 @@ const state: State = {
   data: {
     userToken: "",
     errorMessage: "",
-    currentPosition: ""
+    currentPosition: "",
+    userIsLoggedIn: false,
+    email: "",
+    userId: ""
   },
   listeners: [],
   storage: new CustomStorage(),
@@ -69,32 +76,58 @@ const state: State = {
     }
     try {
       const res = await this.x.post("/auth/signup", { ...userData })
-      console.log(res);
-
+      const { email, id } = res.data.user
+      console.log(res)
+      const cs = this.getState()
+      cs.email = email
+      cs.userId = id
+      this.setState(cs)
       return true
     } catch (error: any) {
-      const msg = error.response.data.message
-      console.log(msg);
+      // const msg = error.response.data.message
+      console.log(error);
       const cs = this.getState()
-      cs.errorMessage = msg
+      cs.errorMessage = "error"
       this.setState(cs)
       return false
     }
   },
   async signin(userData) {
+    const cs = this.getState()
     try {
       const res = await this.x.post("/auth/signin", { ...userData })
       //se setea el token
       this.x.defaults.headers.common['Authorization'] = res.data.token
+      cs.email = res.data.email
+      cs.userIsLoggedIn = true
+      cs.errorMessage = ""
+      this.setState(cs)
       console.log("el usuario se ha autenticado correctamente");
       return true
     } catch (error: any) {
-      const msg = error.response.data.message
-      console.log(msg);
-      const cs = this.getState()
-      cs.errorMessage = msg
+      cs.errorMessage = error.response.data.message
       this.setState(cs)
       return false
+    }
+  },
+  async getDatosPersonales() {
+    const cs = this.getState()
+    try {
+      const res = await this.x.get(`/users/${cs.userId}`)
+    } catch (error: any) {
+      cs.errorMessage = error.response.data.message
+      this.setState(cs)
+    }
+  },
+  async updateDatosPersonales({ name, localidad }) {
+    const cs = this.getState()
+    try {
+      const res = await this.x.update(`/users/${cs.userId}`, {
+        name, localidad
+      })
+    } catch (error: any) {
+      cs.errorMessage = error.response.data.message
+      this.setState(cs)
     }
   },
   async setCurrentPosition() {
@@ -114,7 +147,6 @@ const state: State = {
       console.warn(`ERROR(${err.code}): ${err.message}`);
     }
 
-
     const options = {
       enableHighAccuracy: true,
       timeout: 5000,
@@ -124,6 +156,14 @@ const state: State = {
     navigator
       .geolocation
       .getCurrentPosition(success, error, options);
+  },
+  async logout() {
+    const cs = this.getState()
+    this.x.defaults.headers.common['Authorization'] = ""
+    cs.userIsLoggedIn = false
+    cs.email = ""
+    this.setState(cs)
+    return true
   }
 }
 

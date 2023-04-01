@@ -20,6 +20,8 @@ lostpets
   .patch("/:petId", authMiddleWare, updatePetAsFound)
   .delete("/:petId", authMiddleWare, deleteUserLostPetReport)
 
-
+// auth.
+//   .post("/signin",signin)
+//   .post("/signup",signup)
 
 export { auth, lostpets }

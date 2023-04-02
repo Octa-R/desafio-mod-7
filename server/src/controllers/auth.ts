@@ -3,14 +3,28 @@ import { hash } from "../utils"
 import * as jwt from "jsonwebtoken"
 
 async function register(newUserData) {
-  const { email, password } = newUserData
-  const user = await Auth.findOne({ where: { email: email } });
+  const { email, password, name, localidad } = newUserData
+
+  const user = await Auth.findOne({
+    where: {
+      email: email
+    }
+  });
+
   if (user) {
     throw new Error("el email ya se encuentra en uso")
   }
+
   const userData = await User.create({ email })
-  const newUser = await Auth.create({ email, password, userId: userData.get("id") });
-  return { user: userData, auth: newUser }
+
+  await Auth.create({
+    email, password,
+    userId: userData.get("id"),
+    fullname: name,
+    localidad
+  });
+
+  return { message: "usuario registrado con exito" }
 }
 
 async function login(userData) {

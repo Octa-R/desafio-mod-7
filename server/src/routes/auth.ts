@@ -13,7 +13,8 @@ auth.post("/signin", async (req, res) => {
 })
 //crear cuenta sign up
 auth.post("/signup", async (req, res) => {
-  if (!req.body.email || !req.body.password) {
+  const { email, password, localidad, name } = req.body
+  if (!email || !password || !localidad || !name) {
     res.json({ message: "faltan datos" })
     return
   }

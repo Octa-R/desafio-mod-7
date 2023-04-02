@@ -2,6 +2,10 @@ import * as express from "express"
 import { auth } from "./auth"
 import { authMiddleWare } from "../utils"
 import {
+  updateUserData,
+  getUserData
+} from "./users"
+import {
   getUserLostPetReports,
   createSeenReport,
   updateUserLostPetReport,
@@ -11,6 +15,7 @@ import {
 } from "./lostpets"
 
 const lostpets = express.Router()
+const users = express.Router()
 
 lostpets
   .get("/", authMiddleWare, getUserLostPetReports)
@@ -20,8 +25,11 @@ lostpets
   .patch("/:petId", authMiddleWare, updatePetAsFound)
   .delete("/:petId", authMiddleWare, deleteUserLostPetReport)
 
+users
+  .get("/", authMiddleWare, getUserData)
+  .put("/", authMiddleWare, updateUserData)
 // auth.
 //   .post("/signin",signin)
 //   .post("/signup",signup)
 
-export { auth, lostpets }
+export { auth, lostpets, users }

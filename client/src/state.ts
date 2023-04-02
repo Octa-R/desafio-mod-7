@@ -39,7 +39,8 @@ const state: State = {
     currentPosition: "",
     userIsLoggedIn: false,
     email: "",
-    userId: ""
+    userId: "",
+    password: ""
   },
   listeners: [],
   storage: new CustomStorage(),
@@ -70,24 +71,13 @@ const state: State = {
     this.listeners.push(cb)
   },
   async signup(userData) {
-    if (userData.password != userData.passwordConfirm) {
-      console.log("err");
-      return false
-    }
+    const cs = this.getState()
     try {
       const res = await this.x.post("/auth/signup", { ...userData })
-      const { email, id } = res.data.user
       console.log(res)
-      const cs = this.getState()
-      cs.email = email
-      cs.userId = id
-      this.setState(cs)
       return true
     } catch (error: any) {
-      // const msg = error.response.data.message
-      console.log(error);
-      const cs = this.getState()
-      cs.errorMessage = "error"
+      cs.errorMessage = error.response.data.message
       this.setState(cs)
       return false
     }
@@ -114,9 +104,11 @@ const state: State = {
     const cs = this.getState()
     try {
       const res = await this.x.get(`/users/${cs.userId}`)
+      return res
     } catch (error: any) {
       cs.errorMessage = error.response.data.message
       this.setState(cs)
+
     }
   },
   async updateDatosPersonales({ name, localidad }) {

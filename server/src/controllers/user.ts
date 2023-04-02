@@ -1,15 +1,11 @@
 import { User } from "../models";
 
 async function get(userId) {
-  const user = await User.findByPk(userId)
+  const user = await User.findByPk(userId, { attributes: ["fullname", "localidad", "email"] })
   if (!user) {
     throw new Error("user no encontrado")
   }
-  return {
-    name: user.get("fullname"),
-    localidad: user.get("localidad"),
-    email: user.get("email"),
-  }
+  return user
 }
 
 async function update(userData, userId) {

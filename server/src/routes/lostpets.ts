@@ -1,9 +1,19 @@
 import { lostPetsController } from "../controllers"
 
+const getLostPets = async (req, res) => {
+  try {
+    const lostPets = await lostPetsController
+      .lostPetFindAll()
+    res.json({ lostPets })
+  } catch (error) {
+    res.json(error)
+  }
+}
+
 const getUserLostPetReports = async (req: any, res) => {
   try {
     const lostPets = await lostPetsController
-      .userLostPetFindAll(req.params.userId)
+      .userLostPetFindAll(req._user.id)
     res.json({ lostPets })
   } catch (error) {
     res.json(error)
@@ -99,5 +109,6 @@ export {
   updateUserLostPetReport,
   updatePetAsFound,
   deleteUserLostPetReport,
-  createUserLostPetReport
+  createUserLostPetReport,
+  getLostPets
 }

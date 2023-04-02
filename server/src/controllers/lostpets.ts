@@ -1,6 +1,8 @@
 import { User, LostPet, SeenPet } from "../models"
 import { sgMail } from "../lib/sendgrid";
 
+
+
 async function sendMail({ petName, contactPhone, description, personName }) {
   const msg = {
     to: 'drogaoscura@gmail.com',
@@ -14,6 +16,16 @@ async function sendMail({ petName, contactPhone, description, personName }) {
   } else {
     console.log("mail enviado con exito", ok)
   }
+}
+
+async function lostPetFindAll() {
+  const lostPets = await LostPet.findAll({
+    attributes: ['id', 'name', "lat", "lng", "pictureUrl"],
+    where: {
+      finded: false
+    }
+  });
+  return lostPets
 }
 
 //devuelve las mascotas perdidas de un user
@@ -96,5 +108,6 @@ export {
   userLostPetFindAll,
   userLostPetUpdate,
   userLostPetUpdateAsFound,
-  seenReportCreate
+  seenReportCreate,
+  lostPetFindAll
 }

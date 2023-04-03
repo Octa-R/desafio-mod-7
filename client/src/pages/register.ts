@@ -23,7 +23,8 @@ class RegisterPage extends HTMLElement {
       }
       cs.email = email
       cs.password = password
-      state.setState(state)
+      state.setState(cs)
+      console.log("se guardaron sus datos, redireccionando a mis-datos-personales")
       Router.go("/mis-datos-personales")
     });
   }

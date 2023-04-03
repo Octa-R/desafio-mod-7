@@ -17,10 +17,12 @@ class MisDatosPage extends HTMLElement {
   listeners() {
     const container = this.querySelector(".container")
     container?.addEventListener("change-data", () => {
+      console.log("change data")
       Router.go("/mis-datos-personales")
 
     })
     container?.addEventListener("change-password", () => {
+      console.log("change pass")
       Router.go("/cambiar-password")
     })
   }
@@ -34,9 +36,9 @@ class MisDatosPage extends HTMLElement {
         Mis Datos
       </p>
 
-      <x-btn name="change-data" text="Modificar datos personales"></x-btn>
+      <x-btn name="change-data" text="Modificar datos personales" color="indigo"></x-btn>
 
-      <x-btn name="change-password" text="Modificar contraseña" ></x-btn>
+      <x-btn name="change-password" text="Modificar contraseña" color"indigo"></x-btn>
 
       <div class="mt-auto w-full text-center" >
         <p class="font-bold text-xl ">${cs.email}</p>

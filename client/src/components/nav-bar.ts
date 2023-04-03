@@ -54,6 +54,7 @@ class NavBar extends HTMLElement {
 
   render() {
     const cs = state.getState()
+    console.log("cs en la navbar", cs)
     this.innerHTML = `
     <nav class="bg-zinc-800 fixed w-full top-0 z-50">
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -171,7 +172,7 @@ class NavBar extends HTMLElement {
             <div class="text-gray-300 text-center px-4 py-2 text-base font-medium">
               ${cs.email}
             </div>
-            <div id="logout" class="underline text-bold text-center px-4 py-2 text-base font-medium text-indigo-700 hover:text-indigo-800 cursor-pointer">
+            <div id="logout" class="underline text-bold text-center px-4 py-2 text-base font-medium text-indigo-400 hover:text-indigo-800 cursor-pointer">
               Cerrar sesión
             </div>
           ` :

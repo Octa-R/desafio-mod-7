@@ -16,11 +16,12 @@ class LoginPage extends HTMLElement {
       const email = this.querySelector<HTMLInputElement>("#email")?.value;
       const password = this.querySelector<HTMLInputElement>("#password")?.value;
       const res = await state.signin({ email, password })
+      console.log("respuesta de signin", res)
+
       if (res) {
         Router.go("/")
       } else {
         const cs = state.getState()
-        console.log(cs)
       }
     });
   }

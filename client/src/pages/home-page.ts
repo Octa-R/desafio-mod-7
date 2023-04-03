@@ -25,6 +25,7 @@ class HomePage extends HTMLElement {
   }
 
   render() {
+
     this.innerHTML = `
     <nav-bar></nav-bar>
     <div class="container mx-auto px-12 h-screen flex flex-col justify-center gap-y-4 py-16 items-center">
@@ -37,7 +38,7 @@ class HomePage extends HTMLElement {
         Encontrá y reporta mascotas perdidas cerca de tu ubicación
       </p>
 
-      <x-btn text="Dar mi ubicacion actual" color="blue" id="geoloc-btn"></x-btn>
+      <x-btn text="Dar mi ubicacion actual" color="indigo" id="geoloc-btn"></x-btn>
 
       <x-btn text="Como funciona Pet Finder?" color="green" id="como-func-btn"></x-btn>
     </div>

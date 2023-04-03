@@ -5,14 +5,15 @@ class HomeMascotas extends HTMLElement {
   }
 
   connectedCallback() {
-    this.render();
+    state.getLostPets().then(() => {
+      this.render();
+    })
   }
 
   addListeners() {
-    this.querySelector("#geoloc-btn")?.addEventListener("click", () => {
-      state.setCurrentPosition()
-    })
+
   }
+
 
   render() {
     this.innerHTML = `
@@ -26,7 +27,6 @@ class HomeMascotas extends HTMLElement {
 
     </div>
     `;
-    // <lost-pet-list></lost-pet-list>
     this.addListeners()
   }
 }

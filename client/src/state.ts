@@ -17,6 +17,7 @@ interface State {
   getDatosPersonales: () => any
   updateDatosPersonales: (props: { fullname: string, localidad: string }) => any
   getLostPets: () => Promise<boolean>
+  getUserLostPets: () => Promise<boolean>
   resetState: () => void
 }
 
@@ -185,6 +186,22 @@ const state: State = {
       const { data } = await this.x.get("/pets/")
       console.log(data)
       cs.lostPetsList = data.lostPets
+      res = true
+    } catch (error: any) {
+      cs.errorMessage = error.response.data.message
+      res = false
+    } finally {
+      this.setState(cs)
+      return res
+    }
+  },
+  async getUserLostPets() {
+    const cs = this.getState()
+    let res = false
+    try {
+      const { data } = await this.x.get("/users/pets/")
+      console.log("getUserLostPets", data)
+      cs.userLostPets = data.userLostPets
       res = true
     } catch (error: any) {
       cs.errorMessage = error.response.data.message

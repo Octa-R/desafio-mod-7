@@ -26,7 +26,7 @@ lostpets
 users
   .get("/", authMiddleWare, getUserData)
   .put("/", authMiddleWare, updateUserData)
-  .post("/", authMiddleWare, createUserLostPetReport)
+  .post("/pets/", authMiddleWare, createUserLostPetReport)
   .get("/pets/", authMiddleWare, getUserLostPetReports)
   .put("/pets/:petId", authMiddleWare, updateUserLostPetReport)
   .patch("/pets/:petId", authMiddleWare, updatePetAsFound)

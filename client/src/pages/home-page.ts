@@ -28,13 +28,14 @@ class HomePage extends HTMLElement {
 
     this.innerHTML = `
     <nav-bar></nav-bar>
-    <div class="container mx-auto px-12 h-screen flex flex-col justify-center gap-y-4 py-16 items-center">
+    <div class="container mx-auto px-6 sm:px-12 
+      h-screen flex flex-col justify-center gap-y-4 py-16 items-center">
 
       <p class="text-8xl text-center font-bold text-orange-600 subpixel-antialiased my-8">
         Pet Finder
       </p>
 
-      <p class="text-2xl text-justify my-8 ">
+      <p class="text-2xl text-justify my-8 w-72 sm:w-96 ">
         Encontrá y reporta mascotas perdidas cerca de tu ubicación
       </p>
 

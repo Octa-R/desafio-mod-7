@@ -12,6 +12,7 @@ const getLostPets = async (req, res) => {
 
 const getUserLostPetReports = async (req: any, res) => {
   try {
+    console.log("getuserLostpetreports", req._user)
     const lostPets = await lostPetsController
       .userLostPetFindAll(req._user.id)
     res.json({ lostPets })

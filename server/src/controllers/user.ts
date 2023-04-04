@@ -9,8 +9,8 @@ async function get(userId) {
 }
 
 async function update(userData, userId) {
-  const { localidad, name } = userData
-  const res = User.update({ localidad, fullname: name }, {
+  const { localidad, fullname } = userData
+  const res = User.update({ localidad, fullname }, {
     where: {
       id: userId
     }

@@ -12,8 +12,8 @@ const signin = async (req, res) => {
 }
 //crear cuenta sign up
 const signup = async (req, res) => {
-  const { email, password, localidad, name } = req.body
-  if (!email || !password || !localidad || !name) {
+  const { email, password, localidad, fullname } = req.body
+  if (!email || !password || !localidad || !fullname) {
     res.json({ message: "faltan datos" })
     return
   }

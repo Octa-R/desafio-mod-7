@@ -29,8 +29,13 @@ async function lostPetFindAll() {
 }
 
 //devuelve las mascotas perdidas de un user
-async function userLostPetFindAll(userId): Promise<User> {
-  const userLostPets = await User.findByPk(userId, { include: LostPet })
+async function userLostPetFindAll(userId): Promise<any> {
+  console.log("entro a userLostPetFindAll")
+  const userLostPets = await User.findByPk(userId, {
+    include: LostPet,
+    attributes: ['email', 'fullname', 'localidad']
+  })
+  console.log("userlostpets", userLostPets)
   if (!userLostPets) {
     throw new Error("no existe el user")
   }

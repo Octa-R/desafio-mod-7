@@ -39,22 +39,19 @@ class Button extends HTMLElement {
         type="submit"
         class="
           ${this.colorClasses.get(this.color)}
-          text-sm
           inline-flex 
-          sm:w-96
-          w-72
+          w-full
+          max-w-16
           justify-center 
-          rounded-md 
+          rounded
           shadow-md
           text-white
-          px-6
-          py-3
-          font-medium 
-          rounder-md
-          focus:outline-nonde
+          px-8
+          py-2
+          font-bold 
+          focus:outline-none
           focus:ring-2
           focus:ring-offset-2
-          sm:text-base
         "
       >
           ${this.text}

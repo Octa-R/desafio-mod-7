@@ -1,5 +1,7 @@
 import { Router } from "@vaadin/router";
 import axios from "axios"
+import { ImportMeta } from "./utils/ImportMeta";
+
 interface State {
   listeners: Array<() => void>;
   data: any
@@ -35,12 +37,6 @@ class CustomStorage {
   }
 }
 
-interface ImportMeta {
-  env: {
-    VITE_API_URL: string
-  }
-}
-
 const state: State = {
   data: {
     jwtToken: "",
@@ -66,7 +62,7 @@ const state: State = {
       headers: { 'Content-Type': 'application/json' }
     });
 
-    this.x.defaults.headers.common['Authorization'] = "Bearer " + cs.jwtToken
+    this.x.defaults.headers.common['Authorization'] = cs.jwtToken
   },
   getState() {
     const data = this.storage.get("app-state");
@@ -91,7 +87,7 @@ const state: State = {
       return true
     } catch (error: any) {
       const cs = this.getState()
-      cs.errorMessage = error.response.data.message
+      cs.errorMessage = error.response.data.message || error.message
       this.setState(cs)
       return false
     }
@@ -102,7 +98,7 @@ const state: State = {
     try {
       const res = await this.x.post("/auth/signin", { ...userData })
       //se setea el token
-      this.x.defaults.headers.common['Authorization'] = "Bearer " + res.data.token
+      this.x.defaults.headers.common['Authorization'] = res.data.token
 
       cs.email = res.data.email
       cs.userIsLoggedIn = true
@@ -110,7 +106,7 @@ const state: State = {
       cs.jwtToken = res.data.token
       response = true
     } catch (error: any) {
-      cs.errorMessage = error.response.data.message
+      cs.errorMessage = error.response.data.message || error.message
       response = false
     } finally {
       this.setState(cs)
@@ -125,9 +121,8 @@ const state: State = {
       cs.fullname = res.data.fullname
       cs.localidad = res.data.localidad
     } catch (error: any) {
-      cs.errorMessage = error.response.data.message
+      cs.errorMessage = error.response.data.message || error.message
     } finally {
-      console.log("se setea el state")
       this.setState(cs)
     }
   },
@@ -145,6 +140,7 @@ const state: State = {
     }
   },
   async setCurrentPosition() {
+
     const success = (pos: any) => {
       const crd = pos.coords;
       const cs = this.getState()
@@ -172,11 +168,8 @@ const state: State = {
       .getCurrentPosition(success, error, options);
   },
   async logout() {
-    const cs = this.getState()
     this.x.defaults.headers.common['Authorization'] = ""
-    cs.userIsLoggedIn = false
-    cs.email = ""
-    this.setState(cs)
+    this.resetState()
     return true
   },
   async getLostPets() {

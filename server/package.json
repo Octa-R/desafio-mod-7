@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "nodemon ./src/index.ts",
     "sync": "ts-node ./src/db/sync.ts",
-    "build": "tsc"
+    "build": "tsc",
+    "start": "node ./dist/index.js"
   },
   "author": "",
   "license": "ISC",

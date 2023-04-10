@@ -1,9 +1,9 @@
 import "dotenv/config"
-const PORT = process.env.PORT || 3000
+import "./lib/sendgrid"
 import * as express from "express"
 import * as cors from "cors"
 const app = express()
-import "./lib/sendgrid"
+const PORT = process.env.PORT || 3000
 import { auth, lostpets, users } from "./routes"
 
 app.use(cors())
@@ -12,11 +12,7 @@ app.use("/auth", auth)
 app.use("/pets", lostpets)
 app.use("/users", users)
 
-app.get("/test", (req, res) => {
-  console.log("hola test");
-  res.json("hola")
-})
 
 app.listen(PORT, () => {
-  console.log(`Example app listening at http://localhost:${PORT}`)
+  console.log(`listening at http://localhost:${PORT}`)
 })

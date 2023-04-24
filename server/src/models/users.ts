@@ -3,7 +3,6 @@ import { sequelize } from '../db/connection';
 
 class User extends Model {
 
-
 }
 
 User.init({

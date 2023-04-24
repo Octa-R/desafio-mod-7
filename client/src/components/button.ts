@@ -38,10 +38,10 @@ class Button extends HTMLElement {
         id="custom-btn"
         type="submit"
         class="
+          self-stretch
           ${this.colorClasses.get(this.color)}
           inline-flex 
           w-full
-          max-w-16
           justify-center 
           rounded
           shadow-md

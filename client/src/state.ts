@@ -18,6 +18,7 @@ interface State {
   setCurrentPosition: () => Promise<any>
   getDatosPersonales: () => any
   updateDatosPersonales: (props: { fullname: string, localidad: string }) => any
+  updatePassword: (pass: string, confirm: string) => any
   getLostPets: () => Promise<boolean>
   getUserLostPets: () => Promise<boolean>
   resetState: () => void
@@ -54,7 +55,7 @@ const state: State = {
   x: null,
   init() {
     const cs = state.getState();
-    const url = (import.meta as unknown as ImportMeta).env.VITE_API_URL
+    const url = (import.meta as unknown as ImportMeta).env.VITE_API_URL;
     this.setState({ ...this.data, ...cs });
     this.x = axios.create({
       baseURL: url,
@@ -62,14 +63,14 @@ const state: State = {
       headers: { 'Content-Type': 'application/json' }
     });
 
-    this.x.defaults.headers.common['Authorization'] = cs.jwtToken
+    this.x.defaults.headers.common['Authorization'] = cs.jwtToken;
   },
   getState() {
     const data = this.storage.get("app-state");
-    return data
+    return data;
   },
   setState(newState) {
-    console.log("soy el state eh cambiado", newState)
+    console.log("soy el state eh cambiado", newState);
     this.data = newState;
     this.storage.save("app-state", this.data);
 
@@ -78,84 +79,84 @@ const state: State = {
     }
   },
   subscribe(cb: () => any) {
-    this.listeners.push(cb)
+    this.listeners.push(cb);
   },
   async signup(userData) {
     try {
-      const res = await this.x.post("/auth/signup", { ...userData })
-      console.log("signup", res)
-      return true
+      const res = await this.x.post("/auth/signup", { ...userData });
+      console.log("signup", res);
+      return true;
     } catch (error: any) {
-      const cs = this.getState()
-      cs.errorMessage = error.response.data.message || error.message
-      this.setState(cs)
-      return false
+      const cs = this.getState();
+      cs.errorMessage = error.response.data.message || error.message;
+      this.setState(cs);
+      return false;
     }
   },
   async signin(userData) {
-    const cs = this.getState()
-    let response: boolean = false
+    const cs = this.getState();
+    let response: boolean = false;
     try {
-      const res = await this.x.post("/auth/signin", { ...userData })
+      const res = await this.x.post("/auth/signin", { ...userData });
       //se setea el token
-      this.x.defaults.headers.common['Authorization'] = res.data.token
+      this.x.defaults.headers.common['Authorization'] = res.data.token;
 
-      cs.email = res.data.email
-      cs.userIsLoggedIn = true
-      cs.errorMessage = ""
-      cs.jwtToken = res.data.token
-      response = true
+      cs.email = res.data.email;
+      cs.userIsLoggedIn = true;
+      cs.errorMessage = "";
+      cs.jwtToken = res.data.token;
+      response = true;
     } catch (error: any) {
-      cs.errorMessage = error.response.data.message || error.message
-      response = false
+      cs.errorMessage = error.response.data.message || error.message;
+      response = false;
     } finally {
-      this.setState(cs)
-      return response
+      this.setState(cs);
+      return response;
     }
   },
   async getDatosPersonales() {
-    const cs = this.getState()
+    const cs = this.getState();
     try {
-      const res = await this.x.get(`/users`)
-      cs.email = res.data.email
-      cs.fullname = res.data.fullname
-      cs.localidad = res.data.localidad
+      const res = await this.x.get(`/users`);
+      cs.email = res.data.email;
+      cs.fullname = res.data.fullname;
+      cs.localidad = res.data.localidad;
     } catch (error: any) {
-      cs.errorMessage = error.response.data.message || error.message
+      cs.errorMessage = error.response.data.message || error.message;
     } finally {
-      this.setState(cs)
+      this.setState(cs);
     }
   },
   async updateDatosPersonales({ fullname, localidad }) {
-    const cs = this.getState()
+    const cs = this.getState();
     try {
       const update = await this.x.put(`/users`, {
         fullname, localidad
-      })
-      console.log(update)
+      });
+      console.log(update);
     } catch (error: any) {
-      console.log(error)
-      cs.errorMessage = error.response.data.message || error.message
-      this.setState(cs)
+      console.log(error);
+      cs.errorMessage = error.response.data.message || error.message;
+      this.setState(cs);
     }
   },
   async setCurrentPosition() {
 
     const success = (pos: any) => {
       const crd = pos.coords;
-      const cs = this.getState()
+      const cs = this.getState();
       cs.currentPosition = {
         lat: crd.latitude,
         lng: crd.longitude,
         acc: crd.accuracy
-      }
-      this.setState(cs)
-      Router.go("/home-mascotas")
-    }
+      };
+      this.setState(cs);
+      Router.go("/home-mascotas");
+    };
 
     const error = (err: any) => {
       console.warn(`ERROR(${err.code}): ${err.message}`);
-    }
+    };
 
     const options = {
       enableHighAccuracy: true,
@@ -168,51 +169,56 @@ const state: State = {
       .getCurrentPosition(success, error, options);
   },
   async logout() {
-    this.x.defaults.headers.common['Authorization'] = ""
-    this.resetState()
-    return true
+    this.x.defaults.headers.common['Authorization'] = "";
+    this.resetState();
+    return true;
   },
   async getLostPets() {
-    const cs = this.getState()
-    let res = false
+    const cs = this.getState();
+    let res = false;
     try {
-      const { data } = await this.x.get("/pets/")
-      console.log(data)
-      cs.lostPetsList = data.lostPets
-      res = true
+      const { data } = await this.x.get("/pets/");
+      console.log(data);
+      cs.lostPetsList = data.lostPets;
+      res = true;
     } catch (error: any) {
-      cs.errorMessage = error.response.data.message
-      res = false
+      cs.errorMessage = error.response.data.message;
+      res = false;
     } finally {
-      this.setState(cs)
-      return res
+      this.setState(cs);
+      return res;
     }
   },
   async getUserLostPets() {
-    const cs = this.getState()
-    let res = false
     try {
-      const { data } = await this.x.get("/users/pets/")
-      console.log("getUserLostPets", data)
-      cs.userLostPets = data.userLostPets
-      res = true
+      const { data } = await this.x.get("/users/pets/");
+      console.log("getUserLostPets", data);
+      cs.userLostPets = data.userLostPets;
+      res = true;
     } catch (error: any) {
-      cs.errorMessage = error.response.data.message
-      res = false
+      cs.errorMessage = error.response.data.message;
+      res = false;
     } finally {
-      this.setState(cs)
-      return res
+      this.setState(cs);
+      return res;
     }
   },
   resetState() {
-    const cs = this.getState()
-    cs.email = ""
-    cs.userIsLoggedIn = false
-    cs.errorMessage = ""
-    cs.currentPosition = ""
-    cs.password = ""
-    cs.lostPetsList = []
-    this.setState(cs)
+    const cs = this.getState();
+    cs.email = "";
+    cs.userIsLoggedIn = false;
+    cs.errorMessage = "";
+    cs.currentPosition = "";
+    cs.password = "";
+    cs.lostPetsList = [];
+    this.setState(cs);
+  },
+  updatePassword: function (pass: string, confirm: string) {
+    if (pass !== confirm) {
+      console.log("no son iguales")
+      return
+    }
+    this.x.post("/users/")
   }
 }
 

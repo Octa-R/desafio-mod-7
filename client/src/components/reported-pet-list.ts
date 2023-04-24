@@ -20,11 +20,12 @@ class ReportedList extends HTMLElement {
   }
 
   render() {
+    state.getUserLostPets()
     const userPetsList: { id: string, name: string, lat: string, lng: string, pictureUrl: string }[] = state.getState().userPetsList
-
+    console.log("las pets del user", userPetsList)
     this.innerHTML = `
       <div class="list grid sm:grid-cols-2 grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-4 content-normal place-content-center place-items-center">
-       ${userPetsList
+       ${userPetsList && userPetsList
         .map((pet) => `<reported-pet-card 
           pet-id="${pet.id}"
           name="${pet.name}"

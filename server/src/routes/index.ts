@@ -1,5 +1,5 @@
 import * as express from "express"
-import { signin, signup, me } from "./auth"
+import { signin, signup, me, updateUserPassword } from "./auth"
 import { authMiddleWare } from "../utils"
 import {
   updateUserData,
@@ -36,5 +36,6 @@ auth
   .post("/signin", signin)
   .post("/signup", signup)
   .get("/me", authMiddleWare, me)
+  .put("/", authMiddleWare, updateUserPassword)
 
 export { auth, lostpets, users }

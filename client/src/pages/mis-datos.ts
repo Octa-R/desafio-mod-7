@@ -30,7 +30,7 @@ class MisDatosPage extends HTMLElement {
     const cs = state.getState()
     this.innerHTML = `
     <nav-bar activeMenu="mis-datos"></nav-bar>
-    <div class="container mx-auto px-12 h-screen flex flex-col justify-center gap-y-4 py-16 items-center">
+    <div class="container mx-auto px-12 h-screen flex flex-col justify-center gap-y-4 py-16 sm:max-w-lg">
 
       <p class="text-4xl text-center font-bold subpixel-antialiased self-center mb-auto mt-24">
         Mis Datos
@@ -38,7 +38,7 @@ class MisDatosPage extends HTMLElement {
 
       <x-btn name="change-data" text="Modificar datos personales" color="indigo"></x-btn>
 
-      <x-btn name="change-password" text="Modificar contraseña" color"indigo"></x-btn>
+      <x-btn name="change-password" text="Modificar contraseña" color="indigo"></x-btn>
 
       <div class="mt-auto w-full text-center" >
         <p class="font-bold text-xl ">${cs.email}</p>

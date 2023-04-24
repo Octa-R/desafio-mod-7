@@ -34,4 +34,13 @@ const me = async (req, res) => {
   }
 }
 
-export { signin, signup, me }
+const updateUserPassword = async (req, res) => {
+  try {
+    const response = await authController.update(req.body, req._user.id)
+    res.json(response)
+  } catch (error) {
+    res.status(401).json({ message: error.message })
+  }
+}
+
+export { signin, signup, me, updateUserPassword }

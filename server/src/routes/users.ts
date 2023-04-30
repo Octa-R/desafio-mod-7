@@ -10,6 +10,7 @@ const updateUserData = async (req, res) => {
 }
 
 const getUserData = async (req, res) => {
+  console.log("getuserdata")
   try {
     const user = await userController.get(req._user.id)
     res.json(user)

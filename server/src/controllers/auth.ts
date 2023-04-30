@@ -57,4 +57,12 @@ async function me(userId: string) {
   return { user }
 }
 
-export { me, login, register }
+async function update({password},userId){
+  return await Auth.update({ password },{ 
+    where:{
+      userId
+    }
+  })
+}
+
+export { me, login, register,update }

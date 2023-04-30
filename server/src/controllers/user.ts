@@ -1,6 +1,7 @@
 import { User } from "../models";
 
 async function get(userId) {
+  console.log("get user controller")
   const user = await User.findByPk(userId, { attributes: ["fullname", "localidad", "email"] })
   if (!user) {
     throw new Error("user no encontrado")

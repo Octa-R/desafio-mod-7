@@ -54,7 +54,6 @@ class NavBar extends HTMLElement {
 
   render() {
     const cs = state.getState()
-    console.log("cs en la navbar", cs)
     this.innerHTML = `
     <nav class="bg-zinc-800 fixed w-full top-0 z-50">
     <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">

@@ -6,13 +6,17 @@ class MisDatosPersonalesPage extends HTMLElement {
   constructor() {
     super();
     this.userIsLoggedIn = state.getState().userIsLoggedIn
-    // si esta logueado se buscan sus datos y se guardan
-    // en el state
-    !!this.userIsLoggedIn && state.getDatosPersonales()
+    
   }
-
+  
   connectedCallback() {
-    this.render();
+    // si esta logueado se buscan sus datos y se guardan
+    // en el state y luego se renderiza la page
+    !!this.userIsLoggedIn
+    
+    state.getDatosPersonales().then(() => {
+      this.render();
+    })
   }
 
   addListeners() {

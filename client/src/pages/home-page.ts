@@ -28,11 +28,27 @@ class HomePage extends HTMLElement {
 
     this.innerHTML = `
     <nav-bar></nav-bar>
-    <div class="container mx-auto px-6 sm:px-12 
-      h-screen flex flex-col justify-center gap-y-4 py-16 items-stretch sm:max-w-lg">
+    <div 
+      class="
+        container 
+        mx-auto 
+        px-6 
+        sm:px-12 
+        h-screen 
+        flex 
+        flex-col 
+        justify-center
+        gap-y-4 
+        sm:gap-y-8 
+        py-16 
+        items-stretch 
+        sm:max-w-lg
+        "
+    >
 
       <p class="
-        text-8xl 
+        sm:text-8xl 
+        text-7xl
         text-center 
         font-bold 
         text-orange-600 
@@ -40,13 +56,13 @@ class HomePage extends HTMLElement {
         Pet Finder
       </p>
 
-      <p class="text-2xl text-justify my-8 w-72 sm:w-96 mx-auto">
+      <p class="text-2xl text-justify my-4 w-72 sm:w-96 ">
         Encontrá y reporta mascotas perdidas cerca de tu ubicación
       </p>
-
-      <x-btn text="Dar mi ubicacion actual" color="indigo" id="geoloc-btn"></x-btn>
-
-      <x-btn text="Como funciona Pet Finder?" color="green" id="como-func-btn"></x-btn>
+      <div class="flex flex-col gap-2">
+        <x-btn text="Dar mi ubicacion actual" color="indigo" id="geoloc-btn"></x-btn>
+        <x-btn text="Como funciona Pet Finder?" color="green" id="como-func-btn"></x-btn>
+      </div>
     </div>
     `;
     this.addListeners()

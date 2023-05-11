@@ -166,12 +166,14 @@ const state: State = {
 	},
 	async reportPet(data) {
 		try {
-			const res = await this.x.post("/users/pets/", data);
-			console.log(res);
+			await this.x.post("/users/pets/", data);
+			return true;
 		} catch (error: any) {
 			const cs = this.getState();
-			cs.errorMessage = error.response.data.message;
+			console.log(error);
+			cs.errorMessage = "error en reportpet";
 			this.setState(cs);
+			return false;
 		}
 	},
 	resetState() {

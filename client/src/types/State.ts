@@ -24,7 +24,7 @@ interface State {
 	updatePassword: (pass: string, confirm: string) => any;
 	getLostPets: () => Promise<boolean>;
 	getUserLostPets: () => Promise<boolean>;
-	reportPet: (data: any) => void;
+	reportPet: (data: any) => Promise<boolean>;
 	resetState: () => void;
 }
 

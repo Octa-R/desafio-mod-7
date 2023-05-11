@@ -56,20 +56,6 @@ class ReportarMascotaPage extends HTMLElement {
 		})
 			.setLngLat([lng, lat])
 			.addTo(this.map);
-		/*
-                        <input type="q"
-                  id="q"
-                  name="q" 
-                  class="
-                  search-input
-                  w-full 
-                  px-4 py-2 
-                  border border-gray-300 rounded 
-                  focus:outline-none 
-                  focus:border-indigo-500 
-                  shadow-md" required class="search-input">
-                </input>
-        */
 		// configuro el Geocoder
 		this.geocoder.addTo(
 			this.querySelector<HTMLElement>("#geocoder-container")!
@@ -87,7 +73,6 @@ class ReportarMascotaPage extends HTMLElement {
 		marker.on("dragend", () => {
 			const lngLat = marker.getLngLat();
 			this.selectedCoords = [lngLat.lng, lngLat.lat];
-			// console.log(`Longitude: ${lngLat.lng}<br />Latitude: ${lngLat.lat}`);
 		});
 	}
 
@@ -106,7 +91,6 @@ class ReportarMascotaPage extends HTMLElement {
 				thumbnailMethod: "contain",
 				acceptedFiles: ".jpg,.jpeg,.png",
 				previewTemplate: this.getPreviewLayout(),
-				// dictDefaultMessage: 'Arrastra aquí la foto o haz clic para seleccionarla',
 				dictRemoveFile: "Eliminar",
 			}
 		);
@@ -155,12 +139,20 @@ class ReportarMascotaPage extends HTMLElement {
 				lng: this.selectedCoords[0],
 				pictureURI: this.file.dataURL,
 			};
-			state.reportPet(data);
+			state
+				.reportPet(data)
+				.then((res) => {
+					if (res) {
+						Router.go("/mis-mascotas-reportadas");
+					}
+				})
+				.catch((e) => {
+					console.log(e);
+				});
 		});
 	}
 
 	render() {
-		// const cs = state.getState()
 		this.innerHTML = `
       <nav-bar activeMenu="reportar-mascota"></nav-bar>
 

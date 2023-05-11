@@ -1,6 +1,6 @@
 import { Router } from "@vaadin/router";
 import axios from "axios";
-import { ImportMeta } from "./utils/ImportMeta";
+import { ImportMeta } from "./types/ImportMeta";
 import { State } from "./types/State";
 import { CustomStorage } from "./types/CustomStorage";
 import { StateData } from "./types/StateData";
@@ -25,6 +25,8 @@ const state: State = {
 	}),
 	init() {
 		const cs = state.getState();
+		cs.errorMessage = "";
+		cs.password = "";
 		const url = (import.meta as unknown as ImportMeta).env.VITE_API_URL;
 		this.x.defaults.baseURL = url;
 		this.x.defaults.headers.common["Authorization"] = "Bearer " + cs.jwtToken;
@@ -159,9 +161,10 @@ const state: State = {
 		try {
 			const { data } = await this.x.get("/users/pets/");
 			console.log("getUserLostPets", data);
-			return data.userLostPets;
+			return data.lostPets.lostpets;
 		} catch (error: any) {
 			cs.errorMessage = error.response.data.message;
+			return [];
 		}
 	},
 	async reportPet(data) {

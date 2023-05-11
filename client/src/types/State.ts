@@ -23,7 +23,7 @@ interface State {
 	}) => any;
 	updatePassword: (pass: string, confirm: string) => any;
 	getLostPets: () => Promise<boolean>;
-	getUserLostPets: () => Promise<boolean>;
+	getUserLostPets: () => Promise<any[]>;
 	reportPet: (data: any) => Promise<boolean>;
 	resetState: () => void;
 }

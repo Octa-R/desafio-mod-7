@@ -31,12 +31,10 @@ async function lostPetFindAll() {
 
 //devuelve las mascotas perdidas de un user
 async function userLostPetFindAll(userId): Promise<any> {
-	console.log("entro a userLostPetFindAll");
 	const userLostPets = await User.findByPk(userId, {
 		include: LostPet,
 		attributes: ["email", "fullname", "localidad"],
 	});
-	console.log("userlostpets", userLostPets);
 	if (!userLostPets) {
 		throw new Error("no existe el user");
 	}
@@ -47,8 +45,6 @@ async function userLostPetFindAll(userId): Promise<any> {
 async function seenReportCreate(seenReportData) {
 	const { name, contactPhone, description, lostPetId } = seenReportData;
 	const lostPet = await LostPet.findByPk(lostPetId, { include: User });
-
-	console.log(lostPet);
 
 	if (!lostPet) {
 		throw new Error("la mascota no existe");
@@ -72,7 +68,6 @@ async function seenReportCreate(seenReportData) {
 }
 
 async function userLostPetCreate(data) {
-	console.log("data que llega al controller userlostpetcreate", data);
 	const { pictureURI, name, userId, lat, lng } = data;
 	//subir la imagen a cloudinary
 	const pictureUrl = await uploadImageToCloudinary(pictureURI);
@@ -84,7 +79,7 @@ async function userLostPetCreate(data) {
 		userId,
 		objectID: crypto.randomUUID(),
 	});
-	console.log("algolia", algoliaObject);
+	// console.log("algolia", algoliaObject);
 	//crear el reporte asociandolo con el user
 	const lostpet = await LostPet.create({
 		name,
@@ -93,7 +88,7 @@ async function userLostPetCreate(data) {
 		lat,
 		lng,
 	});
-	console.log("lstpet", lostpet);
+	// console.log("lstpet", lostpet);
 	return lostpet;
 }
 
@@ -118,7 +113,6 @@ async function userLostPetDelete({ userId, petId }) {
 	});
 	// 1 -> borro
 	// 0 -> no borro un carajo
-	console.log(lostpet);
 	if (lostpet === 0) {
 		throw new Error("no se borro");
 	}

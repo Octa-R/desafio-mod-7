@@ -1,26 +1,23 @@
 import { Router } from "@vaadin/router";
 import { state } from "../state";
 class MisMascotasReportadasPage extends HTMLElement {
-  constructor() {
-    super();
-    const cs = state.getState()
+	constructor() {
+		super();
 
-    if (!cs.userIsLoggedIn) {
-      Router.go("/login")
-    }
-  }
+		const cs = state.getState();
+		if (!cs.userIsLoggedIn) {
+			Router.go("/login");
+		}
+	}
 
-  connectedCallback() {
-    this.render();
-  }
+	connectedCallback() {
+		this.render();
+	}
 
-  addListeners() {
+	addListeners() {}
 
-  }
-
-
-  render() {
-    this.innerHTML = `
+	render() {
+		this.innerHTML = `
     <nav-bar activeMenu="mis-mascotas-reportadas"></nav-bar>
     <div class="container mx-auto px-12 h-screen pt-16 ">
 
@@ -31,8 +28,8 @@ class MisMascotasReportadasPage extends HTMLElement {
 
     </div>
     `;
-    this.addListeners()
-  }
+		this.addListeners();
+	}
 }
 
-export { MisMascotasReportadasPage }
+export { MisMascotasReportadasPage };

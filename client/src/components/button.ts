@@ -2,6 +2,7 @@ class Button extends HTMLElement {
 	text: string;
 	name: string;
 	color: string;
+	type: string;
 	colorClasses: Map<string, string>;
 	constructor() {
 		super();
@@ -13,10 +14,10 @@ class Button extends HTMLElement {
 			["gray", "bg-gray-700 hover:bg-gray-600 focus:ring-gray-200"],
 		]);
 		this.text = this.getAttribute("text") || "";
+		this.type = this.getAttribute("type") || "";
 		//name es el evento que emite
 		this.name = this.getAttribute("name") || "";
 		this.color = this.getAttribute("color") || "blue";
-
 		this.colorClasses.has(this.color) ? null : (this.color = "blue");
 	}
 	connectedCallback() {
@@ -24,7 +25,6 @@ class Button extends HTMLElement {
 	}
 	listeners() {
 		this.querySelector("#custom-btn")?.addEventListener("click", () => {
-			console.log("se despacho el evt", this.name);
 			this.dispatchEvent(
 				new CustomEvent(this.name, {
 					detail: {
@@ -39,7 +39,7 @@ class Button extends HTMLElement {
 		this.innerHTML = `
       <button 
         id="custom-btn"
-        type="submit"
+		${this.type ? "type='submit'" : "type='button'"}
         class="
           self-stretch
           ${this.colorClasses.get(this.color)}

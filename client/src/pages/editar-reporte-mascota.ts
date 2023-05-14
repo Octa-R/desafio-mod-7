@@ -157,8 +157,16 @@ class EditarReportePage extends HTMLElement {
 				pictureURI: this.pictureUrl,
 				petId: this.petId,
 			};
-			console.log("se enviara esta data para updatear", data);
-			state.updateLostPetReport(data);
+			state.updateLostPetReport(data).then((res) => {
+				console.log("se updateo con exito", res);
+			});
+		});
+
+		this.querySelector("#report-form")!.addEventListener("encontrado", () => {
+			state.updateReportAsFinded(this.petId);
+		});
+		this.querySelector("#cancelar")!.addEventListener("click", () => {
+			Router.go("/mis-mascotas-reportadas");
 		});
 	}
 
@@ -234,9 +242,9 @@ class EditarReportePage extends HTMLElement {
                 border-green-600"
             ></div>
             <div id="geocoder-container"></div>
-            <x-btn text="Guardar" color="blue"></x-btn>
-			<x-btn text="Reportar como encontrado" color="green"></x-btn>
-            <x-btn text="Cancelar" color="gray"></x-btn>
+            <x-btn text="Guardar" color="blue" type="submit"></x-btn>
+			<x-btn text="Reportar como encontrado" color="green" name="encontrado"></x-btn>
+            <x-btn text="Cancelar" color="gray" id="cancelar"></x-btn>
           </form>
         </div>
       </div>
@@ -251,7 +259,6 @@ class EditarReportePage extends HTMLElement {
 		const dropzone = this.querySelector("#dropzone");
 		dropzone!.innerHTML = "";
 		dropzone!.innerHTML = this.getPreviewLayout(this.pictureUrl);
-		// this.file.dataURL = this.pictureUrl;
 	}
 }
 

@@ -5,7 +5,7 @@ const getLostPets = async (req, res) => {
 		const lostPets = await lostPetsController.lostPetFindAll();
 		res.json({ lostPets });
 	} catch (error) {
-		res.json(error);
+		res.status(400).json({ error });
 	}
 };
 
@@ -14,7 +14,7 @@ const getUserLostPetReports = async (req: any, res) => {
 		const lostPets = await lostPetsController.userLostPetFindAll(req._user.id);
 		res.json({ lostPets });
 	} catch (error) {
-		res.json(error);
+		res.status(400).json({ error });
 	}
 };
 
@@ -32,7 +32,7 @@ const updateUserLostPetReport = async (req: any, res) => {
 
 		res.json(report);
 	} catch (error) {
-		res.json({ error });
+		res.status(400).json({ error });
 	}
 };
 const createUserLostPetReport = async (req: any, res) => {
@@ -51,7 +51,7 @@ const createUserLostPetReport = async (req: any, res) => {
 
 		res.json(response);
 	} catch (error) {
-		res.json({ error });
+		res.status(400).json({ error });
 	}
 };
 
@@ -66,7 +66,7 @@ const deleteUserLostPetReport = async (req: any, res) => {
 		});
 		res.json({ deleted: true });
 	} catch (error) {
-		res.json({ deleted: false, message: error.message });
+		res.status(400).json({ error });
 	}
 };
 
@@ -77,7 +77,7 @@ const createSeenReport = async (req: any, res) => {
 		});
 		res.json(newReport);
 	} catch (error) {
-		res.json({ error });
+		res.status(400).json({ error });
 	}
 };
 
@@ -93,7 +93,7 @@ const updatePetAsFound = async (req: any, res) => {
 
 		res.json(report);
 	} catch (error) {
-		res.json({ error });
+		res.status(400).json({ error });
 	}
 };
 
@@ -108,7 +108,7 @@ const getLostPet = async (req, res) => {
 		});
 		res.json(pet);
 	} catch (error) {
-		res.json({ error });
+		res.status(400).json({ error });
 	}
 };
 

@@ -28,6 +28,7 @@ interface State {
 	reportPet: (data: any) => Promise<boolean>;
 	resetState: () => void;
 	updateLostPetReport: (data: any) => Promise<boolean>;
+	updateReportAsFinded: (petId: string) => Promise<boolean>;
 }
 
 export type { State };

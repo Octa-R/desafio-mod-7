@@ -18,16 +18,16 @@ class MisMascotasReportadasPage extends HTMLElement {
 
 	render() {
 		this.innerHTML = `
-    <nav-bar activeMenu="mis-mascotas-reportadas"></nav-bar>
-    <div class="container mx-auto px-12 h-full pt-16 pb-4">
+			<nav-bar activeMenu="mis-mascotas-reportadas"></nav-bar>
+			<div class="container mx-auto px-12 h-full pt-16 pb-4">
 
-      <p class="text-2xl text-center font-bold m-8">
-      Mascotas reportadas
-      </p>
-      <reported-pet-list></reported-pet-list>     
+			<p class="text-2xl text-center font-bold m-8">
+			Mascotas reportadas
+			</p>
+			<reported-pet-list></reported-pet-list>     
 
-    </div>
-    `;
+			</div>
+    	`;
 		this.addListeners();
 	}
 }

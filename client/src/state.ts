@@ -194,10 +194,19 @@ const state: State = {
 	},
 	async updateLostPetReport(data) {
 		try {
-			const res = await this.x.put("/users/pets/" + data.petId, data);
-			console.log(res.data);
+			await this.x.put("/users/pets/" + data.petId, data);
 			return true;
 		} catch (error) {
+			return false;
+		}
+	},
+	async updateReportAsFinded(petId) {
+		try {
+			const res = await this.x.patch("/users/pets/" + petId);
+			console.log(res.data.msg);
+			return true;
+		} catch (error) {
+			console.error(error);
 			return false;
 		}
 	},

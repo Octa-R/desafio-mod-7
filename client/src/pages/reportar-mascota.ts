@@ -37,7 +37,6 @@ class ReportarMascotaPage extends HTMLElement {
 
 	configureMapBox() {
 		//obtengo posicion del usuario
-
 		const cs: any = state.getState();
 		const { lat, lng } = cs.currentPosition;
 
@@ -123,11 +122,12 @@ class ReportarMascotaPage extends HTMLElement {
 			console.log("se borro");
 			const dropzone = this.querySelector("#dropzone");
 			dropzone!.innerHTML = `
-			<div class="absolute inset-0 bg-white  bg-opacity-50">
-      			</div>
-      		<div class="flex items-center justify-center text-gray-700 text-5xl font-bold h-full w-full">
-        		+
-      		</div>`;
+				<div class="absolute inset-0 bg-white  bg-opacity-50">
+					</div>
+				<div class="flex items-center justify-center text-gray-700 text-5xl font-bold h-full w-full">
+					+
+				</div>
+			`;
 		});
 
 		this.querySelector("#report-form")!.addEventListener("submit", (e: any) => {
@@ -142,6 +142,7 @@ class ReportarMascotaPage extends HTMLElement {
 			state
 				.reportPet(data)
 				.then((res) => {
+					console.log("mascota reportada con exito");
 					if (res) {
 						Router.go("/mis-mascotas-reportadas");
 					}
@@ -200,15 +201,11 @@ class ReportarMascotaPage extends HTMLElement {
             <div class="hover:bg-gray-400 relative h-32 border border-gray-400 rounded-lg overflow-hidden cursor-pointer"
               id="dropzone"
             >
-              <div class="absolute inset-0 bg-white  bg-opacity-50">
-              </div>
+              <div class="absolute inset-0 bg-white  bg-opacity-50"></div>
               <div 
                 class="flex items-center justify-center text-gray-700 text-5xl font-bold h-full w-full"
-              >
-                +
-              </div>
-              <div class="dz-message" data-dz-message>
-              </div>
+              >+</div>
+              <div class="dz-message" data-dz-message></div>
             </div>
 
             <div 
@@ -224,15 +221,11 @@ class ReportarMascotaPage extends HTMLElement {
                 outline-red-600
                 border-2
                 border-green-600"
-              >
-              </div>
+            ></div>
 
-              <div id="geocoder-container">
-              </div>
-              <x-btn text="Reportar mascota" color="green">
-              </x-btn>
-              <x-btn text="Cancelar" color="gray">
-              </x-btn>
+              <div id="geocoder-container"></div>
+              <x-btn text="Reportar mascota" color="green" type="submit"></x-btn>
+              <x-btn text="Cancelar" color="gray"></x-btn>
           </form>
         </div>
       </div>

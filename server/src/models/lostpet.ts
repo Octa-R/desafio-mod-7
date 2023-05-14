@@ -11,8 +11,6 @@ LostPet.init(
 			defaultValue: DataTypes.UUIDV4,
 		},
 		name: DataTypes.STRING,
-		lat: DataTypes.FLOAT,
-		lng: DataTypes.FLOAT,
 		pictureUrl: DataTypes.STRING,
 		algoliaObjectID: DataTypes.STRING,
 		finded: {

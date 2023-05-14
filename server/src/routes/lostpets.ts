@@ -1,8 +1,9 @@
 import { lostPetsController } from "../controllers";
 
 const getLostPets = async (req, res) => {
+	console.log(req.query);
 	try {
-		const lostPets = await lostPetsController.lostPetFindAll();
+		const lostPets = await lostPetsController.lostPetFindAll(req.query);
 		res.json({ lostPets });
 	} catch (error) {
 		res.status(400).json({ ok: false, msg: error.message });

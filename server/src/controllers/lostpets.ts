@@ -3,6 +3,8 @@ import { sgMail } from "../lib/sendgrid";
 import { uploadImageToCloudinary } from "../lib/cloudinary";
 import { lostPetsIndex } from "../lib/algolia";
 import * as crypto from "crypto";
+import algoliasearch from "algoliasearch/dist/algoliasearch";
+import { Op } from "sequelize";
 
 async function sendMail({ petName, contactPhone, description, personName }) {
 	const msg = {
@@ -19,11 +21,16 @@ async function sendMail({ petName, contactPhone, description, personName }) {
 	}
 }
 
-async function lostPetFindAll() {
+async function lostPetFindAll(query) {
+	const algoliaResponse = await lostPetsIndex.search("", {
+		aroundLatLng: `${query.lat},${query.lng}`,
+	});
+	const filteredPetIds = algoliaResponse.hits.map((p: any) => p.petId);
 	const lostPets = await LostPet.findAll({
-		attributes: ["id", "name", "lat", "lng", "pictureUrl"],
+		attributes: ["id", "name", "pictureUrl"],
 		where: {
 			finded: false,
+			id: filteredPetIds,
 		},
 	});
 	return lostPets;
@@ -75,8 +82,10 @@ async function userLostPetCreate(data) {
 	//crear el registro en algolia para el geocoding
 	const algoliaObjectID = crypto.randomUUID();
 	lostPetsIndex.saveObject({
-		lat,
-		lng,
+		_geoloc: {
+			lat,
+			lng,
+		},
 		name,
 		userId,
 		objectID: algoliaObjectID,
@@ -85,8 +94,6 @@ async function userLostPetCreate(data) {
 	const lostpet = LostPet.build({
 		name,
 		userId,
-		lat,
-		lng,
 		algoliaObjectID,
 	});
 	const pictureUrl = await pictureUrlPromise;
@@ -114,10 +121,13 @@ async function userLostPetUpdate(update, petId, userId) {
 	}
 
 	delete update.pictureURI;
-
+	if (update.lat & update.lng) {
+		update._geoloc = { lng: update.lng, lat: update.lat };
+	}
 	//updatear el registro en algolia para el geocoding
 	const algolia = await lostPetsIndex.partialUpdateObject({
 		...update,
+		petId,
 		objectID: lostpet.get("algoliaObjectID"),
 	});
 

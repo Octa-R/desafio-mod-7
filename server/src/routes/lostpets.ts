@@ -5,7 +5,7 @@ const getLostPets = async (req, res) => {
 		const lostPets = await lostPetsController.lostPetFindAll();
 		res.json({ lostPets });
 	} catch (error) {
-		res.status(400).json({ error });
+		res.status(400).json({ ok: false, msg: error.message });
 	}
 };
 
@@ -14,25 +14,28 @@ const getUserLostPetReports = async (req: any, res) => {
 		const lostPets = await lostPetsController.userLostPetFindAll(req._user.id);
 		res.json({ lostPets });
 	} catch (error) {
-		res.status(400).json({ error });
+		res.status(400).json({ ok: false, msg: error.message });
 	}
 };
 
 const updateUserLostPetReport = async (req: any, res) => {
 	const { lat, lng, name, pictureURI } = req.body;
+	const petId = req.params.petId;
 
-	if (!lat || !lng || !name || !pictureURI) {
-		res.json("faltan datos");
-	}
+	// if (!lat || !lng || !name || !pictureURI) {
+	// 	res.json({ ok: false, msg: "faltan datos" });
+	// }
 	try {
-		const report = await lostPetsController.userLostPetUpdate({
-			...req.body,
-			userId: req._user.id,
-		});
-
+		const report = await lostPetsController.userLostPetUpdate(
+			{
+				...req.body,
+			},
+			petId,
+			req._user.id
+		);
 		res.json(report);
 	} catch (error) {
-		res.status(400).json({ error });
+		res.status(400).json({ ok: false, msg: error.message });
 	}
 };
 const createUserLostPetReport = async (req: any, res) => {
@@ -51,7 +54,7 @@ const createUserLostPetReport = async (req: any, res) => {
 
 		res.json(response);
 	} catch (error) {
-		res.status(400).json({ error });
+		res.status(400).json({ ok: false, msg: error.message });
 	}
 };
 

@@ -100,38 +100,40 @@ async function userLostPetCreate(data) {
 	return lostpet;
 }
 
-async function userLostPetUpdate({
-	lat,
-	lng,
-	name,
-	pictureURI,
-	petId,
-	userId,
-}) {
-	const lostPet = await LostPet.findByPk(petId);
-	if (!lostPet) {
+async function userLostPetUpdate(update, petId, userId) {
+	console.log("user lost pet update", update);
+	const lostpet = await LostPet.findByPk(petId);
+	if (!lostpet) {
 		throw new Error("la mascota no existe");
 	}
-	//subir la imagen nueva a cloudinary y borrar la vieja
-	const pictureUrl = await uploadImageToCloudinary(pictureURI);
+
+	if (update.pictureURI) {
+		//subir la imagen nueva a cloudinary y borrar la vieja
+		const pictureUrl = await uploadImageToCloudinary(update.pictureURI);
+		update.pictureUrl = pictureUrl;
+	}
+
+	delete update.pictureURI;
+
 	//updatear el registro en algolia para el geocoding
-	await lostPetsIndex.partialUpdateObject({
-		lat,
-		lng,
-		name,
-		objectID: lostPet.get("algoliaObjectID"),
+	const algolia = await lostPetsIndex.partialUpdateObject({
+		...update,
+		objectID: lostpet.get("algoliaObjectID"),
 	});
-	//update el registro de mascota perdida
-	const lostpet = await LostPet.update(
-		{ lat, lng, name, pictureUrl },
+
+	const lostpetUpdate = await LostPet.update(
+		{ ...update },
 		{
 			where: {
 				id: petId,
-				userId,
+				userId: userId,
 			},
 		}
 	);
-	return lostpet;
+	if (lostpetUpdate[0] === 0) {
+		throw new Error("error en la actualizacion");
+	}
+	return { msg: "reporte actualizado con exito" };
 }
 
 async function userLostPetGetOne({ userId, petId }) {

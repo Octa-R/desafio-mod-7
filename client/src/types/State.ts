@@ -24,8 +24,10 @@ interface State {
 	updatePassword: (pass: string, confirm: string) => any;
 	getLostPets: () => Promise<boolean>;
 	getUserLostPets: () => Promise<any[]>;
+	getReportedPetData: (petId: string) => Promise<any[]>;
 	reportPet: (data: any) => Promise<boolean>;
 	resetState: () => void;
+	updateLostPetReport: (data: any) => Promise<boolean>;
 }
 
 export type { State };

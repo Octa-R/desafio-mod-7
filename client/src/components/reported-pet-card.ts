@@ -75,7 +75,18 @@ class ReportedPetCard extends HTMLElement {
 		this.innerHTML = `
       <div class="bg-fadeout bg-fadeIn modal-scaleOut modal-scaleIn hidden"></div>
       <div 
-        class="shadow-lg overflow-hidden bg-gray-700 p-2 rounded-md sm:mt-0 sm:text-sm max-w-max w-80 h-56">
+        class="
+			shadow-lg 
+			overflow-hidden 
+			bg-gray-700 
+			p-2 
+			rounded-md 
+			sm:mt-0 
+			sm:text-sm 
+			max-w-max 
+			max-w-80 
+			w-80 
+			h-56">
         <div class="flex flex-col items-center h-full justify-between">
 
           <img src="${this.pictureUrl}" 

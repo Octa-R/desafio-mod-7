@@ -72,14 +72,14 @@ async function userLostPetCreate(data) {
 	//subir la imagen a cloudinary
 	const pictureUrl = await uploadImageToCloudinary(pictureURI);
 	//crear el registro en algolia para el geocoding
+	const algoliaObjectID = crypto.randomUUID();
 	const algoliaObject = await lostPetsIndex.saveObject({
 		lat,
 		lng,
 		name,
 		userId,
-		objectID: crypto.randomUUID(),
+		objectID: algoliaObjectID,
 	});
-	// console.log("algolia", algoliaObject);
 	//crear el reporte asociandolo con el user
 	const lostpet = await LostPet.create({
 		name,
@@ -87,20 +87,52 @@ async function userLostPetCreate(data) {
 		pictureUrl,
 		lat,
 		lng,
+		algoliaObjectID,
 	});
-	// console.log("lstpet", lostpet);
 	return lostpet;
 }
 
-async function userLostPetUpdate({ lat, lng, name, pictureUrl, petId }) {
+async function userLostPetUpdate({
+	lat,
+	lng,
+	name,
+	pictureURI,
+	petId,
+	userId,
+}) {
+	const lostPet = await LostPet.findByPk(petId);
+	if (!lostPet) {
+		throw new Error("la mascota no existe");
+	}
+	//subir la imagen nueva a cloudinary y borrar la vieja
+	const pictureUrl = await uploadImageToCloudinary(pictureURI);
+	//updatear el registro en algolia para el geocoding
+	await lostPetsIndex.partialUpdateObject({
+		lat,
+		lng,
+		name,
+		objectID: lostPet.get("algoliaObjectID"),
+	});
+	//update el registro de mascota perdida
 	const lostpet = await LostPet.update(
 		{ lat, lng, name, pictureUrl },
 		{
 			where: {
 				id: petId,
+				userId,
 			},
 		}
 	);
+	return lostpet;
+}
+
+async function userLostPetGetOne({ userId, petId }) {
+	const lostpet = await LostPet.findOne({
+		where: {
+			id: petId,
+			userId: userId,
+		},
+	});
 	return lostpet;
 }
 
@@ -137,6 +169,7 @@ export {
 	userLostPetDelete,
 	userLostPetFindAll,
 	userLostPetUpdate,
+	userLostPetGetOne,
 	userLostPetUpdateAsFound,
 	seenReportCreate,
 	lostPetFindAll,

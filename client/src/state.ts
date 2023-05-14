@@ -16,6 +16,7 @@ const state: State = {
 		lostPetsList: [],
 		fullname: "",
 		localidad: "",
+		petIdSelected: "",
 	},
 	listeners: [],
 	storage: new CustomStorage(),
@@ -176,6 +177,27 @@ const state: State = {
 			console.log(error);
 			cs.errorMessage = "error en reportpet";
 			this.setState(cs);
+			return false;
+		}
+	},
+	async getReportedPetData(petId) {
+		try {
+			const { data } = await this.x.get("/users/pets/" + petId);
+			return data;
+		} catch (error) {
+			const cs = this.getState();
+			console.log(error);
+			cs.errorMessage = "error en reportpet";
+			this.setState(cs);
+			return [];
+		}
+	},
+	async updateLostPetReport(data) {
+		try {
+			const res = await this.x.put("/users/pets/" + data.petId, data);
+			console.log(res.data);
+			return true;
+		} catch (error) {
 			return false;
 		}
 	},

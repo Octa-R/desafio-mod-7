@@ -18,12 +18,10 @@ class ReportedList extends HTMLElement {
 
 	listeners() {
 		this.querySelector(".list")?.addEventListener("report", (e: any) => {
-			console.log("click en mascota");
-			console.log(e.detail);
-			Router.go({
-				pathname: "/editar-reporte-mascota/",
-				search: e.detail.petId,
-			});
+			const cs = state.getState();
+			cs.petIdSelected = e.detail.petId;
+			state.setState(cs);
+			Router.go("/editar-reporte-mascota");
 		});
 	}
 

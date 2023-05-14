@@ -1,3 +1,3 @@
 import { sequelize } from "./connection";
-import "../models"
-sequelize.sync({ alter: true }).then((res) => console.log(res));
+import "../models";
+sequelize.sync({ force: true }).then((res) => console.log(res));

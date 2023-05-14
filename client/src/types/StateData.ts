@@ -8,5 +8,6 @@ interface StateData {
 	lostPetsList?: [];
 	fullname?: string;
 	localidad?: string;
+	petIdSelected?: string;
 }
 export type { StateData };

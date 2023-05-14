@@ -2,29 +2,42 @@ import { Router } from "@vaadin/router";
 import { state } from "../state";
 import Dropzone from "dropzone";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
+import { Map } from "mapbox-gl";
 import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 import "mapbox-gl/dist/mapbox-gl.css";
 import { mapboxgl } from "../utils/mapbox";
-
+import { urlToBase64 } from "../utils/urlToBase64";
 class EditarReportePage extends HTMLElement {
 	dropzone: any;
 	file: any;
-	map: any;
-	geocoder: any;
-	selectedCoords: number[];
-
+	map!: Map;
+	geocoder!: MapboxGeocoder;
+	selectedCoords: { lng: number; lat: number };
+	petId: string;
+	petName = "";
+	pictureUrl = "";
 	constructor() {
 		super();
 		const cs = state.getState();
 		this.file = null;
 		this.dropzone = null;
+		this.petId = cs.petIdSelected || "";
+		this.petName = "";
 		if (!cs.userIsLoggedIn) {
 			Router.go("/login");
 		}
-		this.selectedCoords = [0, 0];
+		this.selectedCoords = { lng: 0, lat: 0 };
 	}
 
 	connectedCallback() {
+		this.getDataAndRender();
+	}
+	async getDataAndRender() {
+		console.log("asdas");
+		const pet: any = await state.getReportedPetData(this.petId);
+		this.petName = pet.name;
+		this.selectedCoords = { lng: pet.lng, lat: pet.lat };
+		this.pictureUrl = await urlToBase64(pet.pictureUrl);
 		this.render();
 	}
 
@@ -36,12 +49,10 @@ class EditarReportePage extends HTMLElement {
 	}
 
 	configureMapBox() {
-		//obtengo posicion del usuario
-
-		const cs: any = state.getState();
-		const { lat, lng } = cs.currentPosition;
-
-		// centro el mapa en la posicion del usuario
+		//obtengo coordenadas de la mascota perdida
+		const { lng, lat } = this.selectedCoords;
+		// centro el mapa en la posicion
+		// de la mascota
 		this.map = new mapboxgl.Map({
 			container: this.querySelector<HTMLElement>("#mapbox-container")!,
 			style: "mapbox://styles/mapbox/streets-v11",
@@ -60,6 +71,7 @@ class EditarReportePage extends HTMLElement {
 		this.geocoder.addTo(
 			this.querySelector<HTMLElement>("#geocoder-container")!
 		);
+		//seteo lenguaje
 		this.geocoder.setLanguage("es");
 		this.geocoder.setCountries("ar");
 
@@ -71,8 +83,8 @@ class EditarReportePage extends HTMLElement {
 		});
 		//cuando se mueve el marker se obtienen las coord
 		marker.on("dragend", () => {
-			const lngLat = marker.getLngLat();
-			this.selectedCoords = [lngLat.lng, lngLat.lat];
+			const { lng, lat } = marker.getLngLat();
+			this.selectedCoords = { lng, lat };
 		});
 	}
 
@@ -96,18 +108,20 @@ class EditarReportePage extends HTMLElement {
 		);
 	}
 
-	getPreviewLayout() {
+	getPreviewLayout(imgUrl?: string) {
 		return `
-			<div class="dz-preview dz-image-preview w-full h-full m-0 relative z-0">
+		<div class="dz-preview dz-image-preview w-full h-full m-0 relative z-0">
 			<div class="dz-image">
-				<img class="w-full h-full" data-dz-thumbnail />
+				<img class="w-full h-full" data-dz-thumbnail ${
+					imgUrl ? `src="${imgUrl}"` : ""
+				} />
 			</div>
 			<button type="button" class="dz-remove dz-button h-2 w-2 absolute top-5 right-5 z-10 flex items-center justify-center">
 				<a data-dz-remove>
-				<svg class="fill-red-600 hover:fill-red-800 stroke-2 h-10 w-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960"><path d="m330 768 150-150 150 150 42-42-150-150 150-150-42-42-150 150-150-150-42 42 150 150-150 150 42 42Zm150 208q-82 0-155-31.5t-127.5-86Q143 804 111.5 731T80 576q0-83 31.5-156t86-127Q252 239 325 207.5T480 176q83 0 156 31.5T763 293q54 54 85.5 127T880 576q0 82-31.5 155T763 858.5q-54 54.5-127 86T480 976Zm0-60q142 0 241-99.5T820 576q0-142-99-241t-241-99q-141 0-240.5 99T140 576q0 141 99.5 240.5T480 916Zm0-340Z"/></svg>
+					<svg class="fill-red-600 hover:fill-red-800 stroke-2 h-10 w-10" xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960"><path d="m330 768 150-150 150 150 42-42-150-150 150-150-42-42-150 150-150-150-42 42 150 150-150 150 42 42Zm150 208q-82 0-155-31.5t-127.5-86Q143 804 111.5 731T80 576q0-83 31.5-156t86-127Q252 239 325 207.5T480 176q83 0 156 31.5T763 293q54 54 85.5 127T880 576q0 82-31.5 155T763 858.5q-54 54.5-127 86T480 976Zm0-60q142 0 241-99.5T820 576q0-142-99-241t-241-99q-141 0-240.5 99T140 576q0 141 99.5 240.5T480 916Zm0-340Z"/></svg>
 				</a>
 			</button>
-			</div>
+		</div>
     	`;
 	}
 
@@ -120,7 +134,6 @@ class EditarReportePage extends HTMLElement {
 		});
 
 		this.dropzone.on("removedfile", () => {
-			console.log("se borro");
 			const dropzone = this.querySelector("#dropzone");
 			dropzone!.innerHTML = `
 			<div class="absolute inset-0 bg-white  bg-opacity-50">
@@ -133,22 +146,19 @@ class EditarReportePage extends HTMLElement {
 		this.querySelector("#report-form")!.addEventListener("submit", (e: any) => {
 			e.preventDefault();
 			const name = e.target.name.value;
+			if (!this.pictureUrl || !name) {
+				console.error("faltan completar datos");
+				return;
+			}
 			const data = {
 				name,
-				lat: this.selectedCoords[1],
-				lng: this.selectedCoords[0],
-				pictureURI: this.file.dataURL,
+				lat: this.selectedCoords.lat,
+				lng: this.selectedCoords.lng,
+				pictureURI: this.pictureUrl,
+				petId: this.petId,
 			};
-			state
-				.reportPet(data)
-				.then((res) => {
-					if (res) {
-						Router.go("/mis-mascotas-reportadas");
-					}
-				})
-				.catch((e) => {
-					console.log(e);
-				});
+			console.log("se enviara esta data para updatear", data);
+			state.updateLostPetReport(data);
 		});
 	}
 
@@ -183,11 +193,12 @@ class EditarReportePage extends HTMLElement {
         <div class="container mx-auto">
           <form id="report-form" class="dropzone max-w-md mx-auto bg-transparent p-8 flex gap-4 flex-col" autocomplete="off">
                   
-            <label for="name" class="block text-gray-700 font-semibold mb-2">
+            <label for="name" class="block text-gray-700 font-semibold">
               Nombre
             </label>
 
-            <input 
+            <input
+              value="${this.petName}"
               type="name"
               id="name"
               name="name" 
@@ -197,18 +208,15 @@ class EditarReportePage extends HTMLElement {
               shadow-md" required
             >
 
-            <div class="hover:bg-gray-400 relative h-32 border border-gray-400 rounded-lg overflow-hidden cursor-pointer"
-              id="dropzone"
+            <div 
+				class="hover:bg-gray-400 relative h-32 border border-gray-400 rounded-lg overflow-hidden cursor-pointer"
+              	id="dropzone"
             >
-              <div class="absolute inset-0 bg-white  bg-opacity-50">
-              </div>
+              <div class="absolute inset-0 bg-white  bg-opacity-50"></div>
               <div 
                 class="flex items-center justify-center text-gray-700 text-5xl font-bold h-full w-full"
-              >
-                +
-              </div>
-              <div class="dz-message" data-dz-message>
-              </div>
+              > + </div>
+              <div class="dz-message" data-dz-message></div>
             </div>
 
             <div 
@@ -224,15 +232,11 @@ class EditarReportePage extends HTMLElement {
                 outline-red-600
                 border-2
                 border-green-600"
-              >
-              </div>
-
-              <div id="geocoder-container">
-              </div>
-              <x-btn text="Reportar mascota" color="green">
-              </x-btn>
-              <x-btn text="Cancelar" color="gray">
-              </x-btn>
+            ></div>
+            <div id="geocoder-container"></div>
+            <x-btn text="Guardar" color="blue"></x-btn>
+			<x-btn text="Reportar como encontrado" color="green"></x-btn>
+            <x-btn text="Cancelar" color="gray"></x-btn>
           </form>
         </div>
       </div>
@@ -242,6 +246,12 @@ class EditarReportePage extends HTMLElement {
 		this.configureMapBox();
 		this.configureDropzone();
 		this.listeners();
+
+		//reemplazo por la imagen de la mascota
+		const dropzone = this.querySelector("#dropzone");
+		dropzone!.innerHTML = "";
+		dropzone!.innerHTML = this.getPreviewLayout(this.pictureUrl);
+		// this.file.dataURL = this.pictureUrl;
 	}
 }
 

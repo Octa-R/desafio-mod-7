@@ -19,9 +19,9 @@ const getUserLostPetReports = async (req: any, res) => {
 };
 
 const updateUserLostPetReport = async (req: any, res) => {
-	const { lat, lng, name, pictureUrl } = req.body;
+	const { lat, lng, name, pictureURI } = req.body;
 
-	if (!lat || !lng || !name || !pictureUrl) {
+	if (!lat || !lng || !name || !pictureURI) {
 		res.json("faltan datos");
 	}
 	try {
@@ -97,6 +97,21 @@ const updatePetAsFound = async (req: any, res) => {
 	}
 };
 
+const getLostPet = async (req, res) => {
+	if (!req.params.petId) {
+		res.json("faltan datos");
+	}
+	try {
+		const pet = await lostPetsController.userLostPetGetOne({
+			userId: req._user.id,
+			petId: req.params.petId,
+		});
+		res.json(pet);
+	} catch (error) {
+		res.json({ error });
+	}
+};
+
 export {
 	getUserLostPetReports,
 	createSeenReport,
@@ -105,4 +120,5 @@ export {
 	deleteUserLostPetReport,
 	createUserLostPetReport,
 	getLostPets,
+	getLostPet,
 };

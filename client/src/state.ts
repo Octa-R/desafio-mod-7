@@ -220,12 +220,12 @@ const state: State = {
 		cs.lostPetsList = [];
 		this.setState(cs);
 	},
-	updatePassword: function (pass: string, confirm: string) {
-		if (pass !== confirm) {
+	updatePassword: function (password: string, confirm: string) {
+		if (password !== confirm) {
 			console.log("no son iguales");
 			return;
 		}
-		this.x.post("/users/");
+		this.x.put("/auth/", { password });
 	},
 };
 

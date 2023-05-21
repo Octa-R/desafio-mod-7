@@ -1,68 +1,68 @@
-import { User, Auth } from "../models"
-import { hash } from "../utils"
-import * as jwt from "jsonwebtoken"
+import { User, Auth } from "../models";
+import { hash } from "../utils";
+import * as jwt from "jsonwebtoken";
 
 async function register(newUserData) {
-  const { email, password, fullname, localidad } = newUserData
+	const { email, password, fullname, localidad } = newUserData;
 
-  const user = await Auth.findOne({
-    where: {
-      email: email
-    }
-  });
+	const user = await Auth.findOne({
+		where: {
+			email: email,
+		},
+	});
 
-  if (user) {
-    throw new Error("el email ya se encuentra en uso")
-  }
+	if (user) {
+		throw new Error("el email ya se encuentra en uso");
+	}
 
-  const userData = await User.create({
-    email,
-    fullname,
-    localidad,
-    password
-  })
+	const userData = await User.create({
+		email,
+		fullname,
+		localidad,
+		password,
+	});
 
-  await Auth.create({
-    email,
-    password,
-    userId: userData.get("id"),
-  });
+	await Auth.create({
+		email,
+		password,
+		userId: userData.get("id"),
+	});
 
-  return { message: "usuario registrado con exito" }
+	return { message: "usuario registrado con exito" };
 }
 
 async function login(userData) {
-  const { email, password } = userData
-  const auth = await Auth.findOne({
-    where: {
-      email: email,
-      password: hash(email + password)
-    }
-  });
+	const { email, password } = userData;
+	const auth = await Auth.findOne({
+		where: {
+			email: email,
+			password: hash(email + password),
+		},
+	});
 
-  if (!auth) {
-    throw new Error("email o password incorrectos")
-  }
-  const token = jwt.sign({
-    id: auth.get("userId"),
-    email: auth.get("email")
-  },
-    process.env.SECRET)
+	if (!auth) {
+		throw new Error("email o password incorrectos");
+	}
+	const token = jwt.sign(
+		{
+			id: auth.get("userId"),
+			email: auth.get("email"),
+		},
+		process.env.SECRET
+	);
 
-  return { token, email: auth.get("email") }
+	return { token, email: auth.get("email") };
 }
 
-async function me(userId: string) {
-  const user = await User.findByPk(userId)
-  return { user }
+async function update({ password }: any, userId: any) {
+	return await Auth.update(
+		{ password },
+		{
+			where: {
+				userId,
+			},
+		}
+	);
 }
 
-async function update({password},userId){
-  return await Auth.update({ password },{ 
-    where:{
-      userId
-    }
-  })
-}
-
-export { me, login, register,update }
+export { login, register, update };

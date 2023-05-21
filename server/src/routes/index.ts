@@ -1,5 +1,5 @@
 import * as express from "express";
-import { signin, signup, me, updateUserPassword } from "./auth";
+import { signin, signup, updateUserPassword } from "./auth";
 import { authMiddleWare } from "../utils";
 import { updateUserData, getUserData } from "./users";
 import {
@@ -7,7 +7,6 @@ import {
 	createSeenReport,
 	updateUserLostPetReport,
 	updatePetAsFound,
-	deleteUserLostPetReport,
 	createUserLostPetReport,
 	getLostPets,
 	getLostPet,
@@ -25,14 +24,12 @@ users
 	.post("/pets/", authMiddleWare, createUserLostPetReport)
 	.get("/pets/", authMiddleWare, getUserLostPetReports)
 	.get("/pets/:petId", authMiddleWare, getLostPet)
-	.put("/pets/:petId", authMiddleWare, updateUserLostPetReport)
-	.patch("/pets/:petId", authMiddleWare, updatePetAsFound)
-	.delete("/pets/:petId", authMiddleWare, deleteUserLostPetReport);
+	.delete("/pets/:petId", authMiddleWare, updateUserLostPetReport)
+	.patch("/pets/:petId", authMiddleWare, updatePetAsFound);
 
 auth
 	.post("/signin", signin)
 	.post("/signup", signup)
-	.get("/me", authMiddleWare, me)
 	.put("/", authMiddleWare, updateUserPassword);
 
 export { auth, lostpets, users };

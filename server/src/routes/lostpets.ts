@@ -59,20 +59,20 @@ const createUserLostPetReport = async (req: any, res) => {
 	}
 };
 
-const deleteUserLostPetReport = async (req: any, res) => {
-	if (!req.params.petId) {
-		res.json({ deleted: false, message: "falta id" });
-	}
-	try {
-		await lostPetsController.userLostPetDelete({
-			userId: req._user.id,
-			petId: req.params.petId,
-		});
-		res.json({ deleted: true });
-	} catch (error) {
-		res.status(400).json({ error });
-	}
-};
+// const deleteUserLostPetReport = async (req: any, res) => {
+// 	if (!req.params.petId) {
+// 		res.json({ deleted: false, message: "falta id" });
+// 	}
+// 	try {
+// 		await lostPetsController.userLostPetDelete({
+// 			userId: req._user.id,
+// 			petId: req.params.petId,
+// 		});
+// 		res.json({ deleted: true });
+// 	} catch (error) {
+// 		res.status(400).json({ error });
+// 	}
+// };
 
 const createSeenReport = async (req: any, res) => {
 	try {
@@ -121,7 +121,6 @@ export {
 	createSeenReport,
 	updateUserLostPetReport,
 	updatePetAsFound,
-	deleteUserLostPetReport,
 	createUserLostPetReport,
 	getLostPets,
 	getLostPet,

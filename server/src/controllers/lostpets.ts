@@ -21,17 +21,19 @@ async function sendMail({ petName, contactPhone, description, personName }) {
 	}
 }
 
-async function lostPetFindAll(query) {
-	const algoliaResponse = await lostPetsIndex.search("", {
-		aroundLatLng: `${query.lat},${query.lng}`,
-	});
-	const filteredPetIds = algoliaResponse.hits.map((p: any) => p.petId);
+async function lostPetFindAll(query?) {
+	const where: any = { finded: false };
+	if (query.lat && query.lng) {
+		const algoliaResponse = await lostPetsIndex.search("", {
+			aroundLatLng: `${query.lat},${query.lng}`,
+		});
+		const filteredPetIds = algoliaResponse.hits.map((p: any) => p.petId);
+		console.log(algoliaResponse, filteredPetIds);
+		where.id = filteredPetIds;
+	}
 	const lostPets = await LostPet.findAll({
 		attributes: ["id", "name", "pictureUrl"],
-		where: {
-			finded: false,
-			id: filteredPetIds,
-		},
+		where,
 	});
 	return lostPets;
 }
@@ -75,36 +77,37 @@ async function seenReportCreate(seenReportData) {
 }
 
 async function userLostPetCreate(data) {
-	// const start = process.hrtime();
 	const { pictureURI, name, userId, lat, lng } = data;
 	//subir la imagen a cloudinary
 	const pictureUrlPromise = uploadImageToCloudinary(pictureURI);
-	//crear el registro en algolia para el geocoding
+
 	const algoliaObjectID = crypto.randomUUID();
-	lostPetsIndex.saveObject({
-		_geoloc: {
-			lat,
-			lng,
-		},
-		name,
-		userId,
-		objectID: algoliaObjectID,
-	});
+
 	//crear el reporte asociandolo con el user
 	const lostpet = LostPet.build({
 		name,
 		userId,
 		algoliaObjectID,
 	});
+
 	const pictureUrl = await pictureUrlPromise;
 	// Asignar la URL de la imagen después de haber creado el registro
 	lostpet.set({
 		pictureUrl: pictureUrl,
 	});
-	lostpet.save();
-	// const end = process.hrtime(start);
-	// console.info(`Tiempo de ejecución ${end[0]} s y ${end[1] / 1000000} ms`);
-	return lostpet;
+
+	//crear el registro en algolia para el geocoding
+	lostPetsIndex.saveObject({
+		_geoloc: {
+			lat,
+			lng,
+		},
+		name,
+		petId: lostpet.get("id"),
+		userId,
+		objectID: algoliaObjectID,
+	});
+	return await lostpet.save();
 }
 
 async function userLostPetUpdate(update, petId, userId) {
@@ -172,16 +175,19 @@ async function userLostPetDelete({ userId, petId }) {
 }
 
 async function userLostPetUpdateAsFound({ userId, petId }) {
-	const lostpet = await LostPet.update(
+	const [affectedRows, lostpet] = await LostPet.update(
 		{ finded: true },
 		{
 			where: {
 				id: petId,
 				userId: userId,
 			},
+			returning: true,
 		}
 	);
-	if (lostpet[0] != 1) {
+	const id = lostpet[0].get("algoliaObjectID") as string;
+	lostPetsIndex.deleteObject(id);
+	if (affectedRows === 0) {
 		throw new Error("no se borro");
 	}
 	return { msg: "mascota reportada como encontrada con exito!" };

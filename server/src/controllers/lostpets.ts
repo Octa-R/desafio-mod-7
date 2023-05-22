@@ -11,7 +11,6 @@ async function lostPetFindAll(query?) {
 			aroundLatLng: `${query.lat},${query.lng}`,
 		});
 		const filteredPetIds = algoliaResponse.hits.map((p: any) => p.petId);
-		console.log(algoliaResponse, filteredPetIds);
 		where.id = filteredPetIds;
 	}
 	const lostPets = await LostPet.findAll({
@@ -39,7 +38,6 @@ async function seenReportCreate(
 	petId: string
 ) {
 	const { name, contactPhone, description } = seenReportData;
-	console.log(seenReportData);
 
 	const lostPet = await LostPet.findByPk(petId, { include: User });
 

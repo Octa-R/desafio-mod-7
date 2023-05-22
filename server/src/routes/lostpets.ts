@@ -74,7 +74,6 @@ const createUserLostPetReport = async (req: any, res) => {
 // };
 
 const createSeenReport = async (req: any, res) => {
-	console.log("seen repor");
 	try {
 		const newReport = await lostPetsController.seenReportCreate(
 			{

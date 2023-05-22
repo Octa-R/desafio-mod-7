@@ -18,7 +18,7 @@ SeenPet.init(
 		},
 		name: DataTypes.STRING,
 		contactPhone: DataTypes.STRING,
-		description: DataTypes.DATE,
+		description: DataTypes.STRING,
 	},
 	{ sequelize, modelName: "seenpet" }
 );

@@ -51,8 +51,7 @@ const state: State = {
 	},
 	async signup(userData) {
 		try {
-			const res = await this.x.post("/auth/signup", { ...userData });
-			console.log("signup", res);
+			await this.x.post("/auth/signup", { ...userData });
 			return true;
 		} catch (error: any) {
 			const cs = this.getState();
@@ -99,14 +98,12 @@ const state: State = {
 	async updateDatosPersonales({ fullname, localidad }) {
 		const cs = this.getState();
 		try {
-			console.log("dentro de update");
-			const update = await this.x.put(`/users`, {
+			await this.x.put(`/users`, {
 				fullname,
 				localidad,
 			});
-			console.log("respuesta update", update);
 		} catch (error: any) {
-			console.log(error);
+			console.error(error);
 			cs.errorMessage = error.response.data.message || error.message;
 			this.setState(cs);
 		}
@@ -143,25 +140,31 @@ const state: State = {
 	},
 	async getLostPets() {
 		const cs = this.getState();
-		let res = false;
 		try {
 			const { data } = await this.x.get("/pets/");
-			console.log(data);
 			cs.lostPetsList = data.lostPets;
-			res = true;
+			this.setState(cs);
+			return data.lostPets;
 		} catch (error: any) {
 			cs.errorMessage = error.response.data.message;
-			res = false;
-		} finally {
 			this.setState(cs);
-			return res;
+			return [];
+		}
+	},
+	async sendSeenReport(seenData, petId) {
+		try {
+			const res = await this.x.post(`/pets/${petId}`, seenData);
+			console.log(res);
+			return true;
+		} catch (error) {
+			console.error(error);
+			return false;
 		}
 	},
 	async getUserLostPets() {
 		const cs = this.getState();
 		try {
 			const { data } = await this.x.get("/users/pets/");
-			console.log("getUserLostPets", data);
 			return data.lostPets.lostpets;
 		} catch (error: any) {
 			cs.errorMessage = error.response.data.message;
@@ -202,8 +205,7 @@ const state: State = {
 	},
 	async updateReportAsFinded(petId) {
 		try {
-			const res = await this.x.patch("/users/pets/" + petId);
-			console.log(res.data.msg);
+			await this.x.patch("/users/pets/" + petId);
 			return true;
 		} catch (error) {
 			console.error(error);
@@ -222,7 +224,7 @@ const state: State = {
 	},
 	updatePassword: function (password: string, confirm: string) {
 		if (password !== confirm) {
-			console.log("no son iguales");
+			console.error("no son iguales");
 			return;
 		}
 		this.x.put("/auth/", { password });

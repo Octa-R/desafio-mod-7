@@ -24,8 +24,8 @@ users
 	.post("/pets/", authMiddleWare, createUserLostPetReport)
 	.get("/pets/", authMiddleWare, getUserLostPetReports)
 	.get("/pets/:petId", authMiddleWare, getLostPet)
-	.delete("/pets/:petId", authMiddleWare, updateUserLostPetReport)
-	.patch("/pets/:petId", authMiddleWare, updatePetAsFound);
+	.put("/pets/:petId", authMiddleWare, updateUserLostPetReport)
+	.delete("/pets/:petId", authMiddleWare, updatePetAsFound);
 
 auth
 	.post("/signin", signin)

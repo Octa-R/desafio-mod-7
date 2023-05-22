@@ -1,25 +1,8 @@
 import { User, LostPet, SeenPet } from "../models";
-import { sgMail } from "../lib/sendgrid";
 import { uploadImageToCloudinary } from "../lib/cloudinary";
 import { lostPetsIndex } from "../lib/algolia";
 import * as crypto from "crypto";
-import algoliasearch from "algoliasearch/dist/algoliasearch";
-import { Op } from "sequelize";
-
-async function sendMail({ petName, contactPhone, description, personName }) {
-	const msg = {
-		to: "drogaoscura@gmail.com",
-		from: "ruarteoctavio8@gmail.com",
-		subject: `se reporto tu mascota ${petName} como vista!`,
-		text: `nombre:${personName} teléfono:${contactPhone} donde la vio:${description}`,
-	};
-	const ok = await sgMail.send(msg);
-	if (!ok) {
-		console.error("error de envio de mail", ok);
-	} else {
-		console.log("mail enviado con exito", ok);
-	}
-}
+import { sendNotification } from "../utils/sendNotification";
 
 async function lostPetFindAll(query?) {
 	const where: any = { finded: false };
@@ -51,29 +34,37 @@ async function userLostPetFindAll(userId): Promise<any> {
 }
 
 //reporta la mascota como vista, y envia email
-async function seenReportCreate(seenReportData) {
-	const { name, contactPhone, description, lostPetId } = seenReportData;
-	const lostPet = await LostPet.findByPk(lostPetId, { include: User });
+async function seenReportCreate(
+	seenReportData: { name: string; contactPhone: string; description: string },
+	petId: string
+) {
+	const { name, contactPhone, description } = seenReportData;
+	console.log(seenReportData);
+
+	const lostPet = await LostPet.findByPk(petId, { include: User });
 
 	if (!lostPet) {
 		throw new Error("la mascota no existe");
 	}
 
-	const seenPetReport = await SeenPet.create({
+	const destinationMail = (lostPet.get("user") as User).get("email");
+
+	await SeenPet.create({
 		name,
 		contactPhone,
 		description,
-		lostPetId: lostPet.get("id"),
+		lostpetId: lostPet.get("id"),
 	});
 
-	sendMail({
-		petName: lostPet.get("id"),
+	sendNotification({
+		petName: lostPet.get("name"),
 		contactPhone,
 		description,
 		personName: name,
+		destinationMail,
 	});
 
-	return { seenPetReport };
+	return { ok: true, message: "reporte enviado con exito" };
 }
 
 async function userLostPetCreate(data) {

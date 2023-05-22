@@ -1,34 +1,28 @@
-import { state } from "../state";
 class HomeMascotas extends HTMLElement {
-  constructor() {
-    super();
-  }
+	constructor() {
+		super();
+	}
 
-  connectedCallback() {
-    state.getLostPets().then(() => {
-      this.render();
-    })
-  }
+	connectedCallback() {
+		this.render();
+	}
 
-  addListeners() {
+	addListeners() {}
 
-  }
-
-
-  render() {
-    this.innerHTML = `
-    <nav-bar></nav-bar>
-    <div class="container mx-auto px-12 h-screen pt-16 ">
+	render() {
+		this.innerHTML = `
+		<nav-bar></nav-bar>
+		<div class="container mx-auto px-5 h-full pt-16 pb-4">
 
       <p class="text-2xl text-center font-bold m-8">
-      Mascotas perdidas cerca
+        Mascotas perdidas cerca
       </p>
       <lost-pet-list></lost-pet-list>     
 
-    </div>
+		</div>
     `;
-    this.addListeners()
-  }
+		this.addListeners();
+	}
 }
 
-export { HomeMascotas }
+export { HomeMascotas };

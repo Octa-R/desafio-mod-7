@@ -1,7 +1,6 @@
 import { lostPetsController } from "../controllers";
 
 const getLostPets = async (req, res) => {
-	console.log(req.query);
 	try {
 		const lostPets = await lostPetsController.lostPetFindAll(req.query);
 		res.json({ lostPets });
@@ -75,12 +74,17 @@ const createUserLostPetReport = async (req: any, res) => {
 // };
 
 const createSeenReport = async (req: any, res) => {
+	console.log("seen repor");
 	try {
-		const newReport = await lostPetsController.seenReportCreate({
-			...req.body,
-		});
+		const newReport = await lostPetsController.seenReportCreate(
+			{
+				...req.body,
+			},
+			req.params.petId
+		);
 		res.json(newReport);
 	} catch (error) {
+		console.log(error);
 		res.status(400).json({ error });
 	}
 };

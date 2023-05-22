@@ -22,13 +22,14 @@ interface State {
 		localidad: string;
 	}) => any;
 	updatePassword: (pass: string, confirm: string) => any;
-	getLostPets: () => Promise<boolean>;
+	getLostPets: () => Promise<any[]>;
 	getUserLostPets: () => Promise<any[]>;
 	getReportedPetData: (petId: string) => Promise<any[]>;
 	reportPet: (data: any) => Promise<boolean>;
 	resetState: () => void;
 	updateLostPetReport: (data: any) => Promise<boolean>;
 	updateReportAsFinded: (petId: string) => Promise<boolean>;
+	sendSeenReport: (seenData: any, petId: any) => Promise<boolean>;
 }
 
 export type { State };

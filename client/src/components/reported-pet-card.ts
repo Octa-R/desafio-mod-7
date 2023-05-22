@@ -73,25 +73,27 @@ class ReportedPetCard extends HTMLElement {
 	}
 	render() {
 		this.innerHTML = `
-      <div class="bg-fadeout bg-fadeIn modal-scaleOut modal-scaleIn hidden"></div>
       <div 
         class="
-			shadow-lg 
-			overflow-hidden 
-			bg-gray-700 
-			p-2 
-			rounded-md 
-			sm:mt-0 
-			sm:text-sm 
-			max-w-max 
-			max-w-80 
-			w-80 
-			h-56">
+          shadow-lg 
+          overflow-hidden 
+          bg-gray-700 
+          p-2 
+          rounded-md 
+          sm:mt-0 
+          sm:text-sm 
+          max-w-96 
+          w-80
+          h-60"
+		  >
+
         <div class="flex flex-col items-center h-full justify-between">
 
-          <img src="${this.pictureUrl}" 
+          <img 
+            src="${this.pictureUrl}" 
             alt="Foto de mascota perdida" 
-            class="col-span-2 w-52 h-32 rounded object-contain shrink">
+            class="col-span-2 w-52 h-32 rounded object-cover shrink"
+          >
           
           <div class="flex flex-row">
 

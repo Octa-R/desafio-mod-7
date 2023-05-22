@@ -10,7 +10,6 @@ class ReportedList extends HTMLElement {
 
 	connectedCallback() {
 		state.getUserLostPets().then((data) => {
-			console.log(" en list", data);
 			this.lostpets = data;
 			this.render();
 		});
@@ -27,19 +26,19 @@ class ReportedList extends HTMLElement {
 
 	render() {
 		this.innerHTML = `
-      <div class="list grid sm:grid-cols-2 grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-4 content-normal place-content-center place-items-center">
-       ${this.lostpets
-					.map(
-						(pet) => `<reported-pet-card 
+      		<div class="list grid place-items-center sm:grid-cols-2 grid-cols-1 md:grid-cols-3 gap-x-8 gap-y-4 content-normal place-content-center">
+       		${this.lostpets
+						.map(
+							(pet) => `<reported-pet-card 
                         pet-id="${pet.id}"
                         name="${pet.name}"
                         lat="${pet.lat}"
                         lng="${pet.lng}"
                         picture-url="${pet.pictureUrl}"
                       ></reported-pet-card>`
-					)
-					.join("")}
-      </div>
+						)
+						.join("")}
+      		</div>
     `;
 		this.listeners();
 	}

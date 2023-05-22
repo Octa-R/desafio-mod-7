@@ -1,32 +1,30 @@
 import { Router } from "@vaadin/router";
 import { state } from "../state";
 class HomePage extends HTMLElement {
-  constructor() {
-    super();
-  }
+	constructor() {
+		super();
+	}
 
-  connectedCallback() {
-    this.render();
-  }
+	connectedCallback() {
+		this.render();
+	}
 
-  addListeners() {
-    this.querySelector("#geoloc-btn")?.addEventListener("click", () => {
-      state.setCurrentPosition().then(res => {
-        console.log(res)
-        if (res) {
-          Router.go("/home-mascotas")
-        }
-      })
-    })
-    this.querySelector("#como-func-btn")?.addEventListener("click", () => {
-      console.log("como funciona");
+	addListeners() {
+		this.querySelector("#geoloc-btn")?.addEventListener("click", () => {
+			state.setCurrentPosition().then((res) => {
+				console.log(res);
+				if (res) {
+					Router.go("/home-mascotas");
+				}
+			});
+		});
+		this.querySelector("#como-func-btn")?.addEventListener("click", () => {
+			console.log("como funciona");
+		});
+	}
 
-    })
-  }
-
-  render() {
-
-    this.innerHTML = `
+	render() {
+		this.innerHTML = `
     <nav-bar></nav-bar>
     <div 
       class="
@@ -56,7 +54,7 @@ class HomePage extends HTMLElement {
         Pet Finder
       </p>
 
-      <p class="text-2xl text-justify my-4 w-72 sm:w-96 ">
+      <p class="text-2xl text-justify my-4 self-center w-80 sm:w-96 ">
         Encontrá y reporta mascotas perdidas cerca de tu ubicación
       </p>
       <div class="flex flex-col gap-2">
@@ -65,8 +63,8 @@ class HomePage extends HTMLElement {
       </div>
     </div>
     `;
-    this.addListeners()
-  }
+		this.addListeners();
+	}
 }
 
-export { HomePage }
+export { HomePage };

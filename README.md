@@ -30,4 +30,4 @@ Proyecto del módulo 7 para la carrera de apx.school
 
 ## Deploy
 
-[Link](desafio-mod-7.vercel.app)
+[Link](https://desafio-mod-7-aplhd5m52-octa-r.vercel.app/)

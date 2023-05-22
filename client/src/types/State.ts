@@ -16,7 +16,7 @@ interface State {
 	signin: (userData: any) => Promise<boolean>;
 	logout: () => Promise<boolean>;
 	setCurrentPosition: () => Promise<any>;
-	getDatosPersonales: () => any;
+	getDatosPersonales: () => Promise<any>;
 	updateDatosPersonales: (props: {
 		fullname: string;
 		localidad: string;

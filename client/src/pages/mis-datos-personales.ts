@@ -2,52 +2,63 @@ import { Router } from "@vaadin/router";
 import { state } from "../state";
 
 class MisDatosPersonalesPage extends HTMLElement {
-  userIsLoggedIn: boolean
-  constructor() {
-    super();
-    this.userIsLoggedIn = state.getState().userIsLoggedIn
-    
-  }
-  
-  connectedCallback() {
-    // si esta logueado se buscan sus datos y se guardan
-    // en el state y luego se renderiza la page
-    !!this.userIsLoggedIn
-    
-    state.getDatosPersonales().then(() => {
-      this.render();
-    })
-  }
+	userIsLoggedIn: boolean;
+	constructor() {
+		super();
+		const cs = state.getState();
+		this.userIsLoggedIn = cs.userIsLoggedIn || false;
+	}
 
-  addListeners() {
-    const form = this.querySelector("form")
-    form?.addEventListener("submit", (evt) => {
-      evt.preventDefault()
-      const fullname = form.querySelector<HTMLInputElement>("#name")?.value
-      const localidad = form.querySelector<HTMLInputElement>("#localidad")?.value
-      if (!fullname || !localidad) {
-        return
-      }
-      const cs = state.getState()
-      if (!!this.userIsLoggedIn) {
-        state.updateDatosPersonales({ fullname, localidad })
-      } else if (!this.userIsLoggedIn) {
-        state.signup({
-          email: cs.email,
-          password: cs.password,
-          fullname: fullname,
-          localidad
-        }).then(() => {
-          Router.go("/")
-        })
-      }
-    })
-  }
+	connectedCallback() {
+		console.log(
+			this.userIsLoggedIn
+				? "esta logueado, cambiando datos"
+				: "no esta logueado, registrando datos"
+		);
 
-  render() {
-    const cs = state.getState()
-    console.log("cs en mis-datos-personales", cs)
-    this.innerHTML = `
+		if (this.userIsLoggedIn) {
+			state.getDatosPersonales().then(() => {
+				this.render();
+			});
+		} else {
+			this.render();
+		}
+	}
+
+	addListeners() {
+		const form = this.querySelector("form");
+		form?.addEventListener("submit", (evt) => {
+			evt.preventDefault();
+			const fullname = form.querySelector<HTMLInputElement>("#name")?.value;
+			const localidad =
+				form.querySelector<HTMLInputElement>("#localidad")?.value;
+			if (!fullname || !localidad) {
+				console.log("faltan datos");
+				return;
+			}
+			console.log(fullname, localidad);
+			const cs = state.getState();
+			if (!!this.userIsLoggedIn) {
+				state.updateDatosPersonales({ fullname, localidad });
+			} else if (!this.userIsLoggedIn) {
+				state
+					.signup({
+						email: cs.email,
+						password: cs.password,
+						fullname: fullname,
+						localidad,
+					})
+					.then(() => {
+						Router.go("/");
+					});
+			}
+		});
+	}
+
+	render() {
+		const cs = state.getState();
+		console.log("cs en mis-datos-personales", cs);
+		this.innerHTML = `
     <nav-bar activeMenu="mis-datos-personales"></nav-bar>
     <div class="container mx-auto px-12 h-screen flex flex-col justify-center gap-y-4 py-16 items-center">
 
@@ -83,14 +94,12 @@ class MisDatosPersonalesPage extends HTMLElement {
             class="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 shadow-md w-72 md:w-96" required>
         </div>
 
-        <x-btn class="mt-auto"  text="Guardar" color="indigo"></x-btn>
+        <x-btn class="mt-auto" type="submit" text="Guardar" color="indigo"></x-btn>
       </form>
     </div>
     `;
-    this.addListeners()
-    // !!this.userIsLoggedIn && this.readUserData()
-  }
-
+		this.addListeners();
+	}
 }
 
-export { MisDatosPersonalesPage }
+export { MisDatosPersonalesPage };

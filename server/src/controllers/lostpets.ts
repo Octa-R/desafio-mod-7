@@ -87,6 +87,8 @@ async function userLostPetCreate(data) {
 	const lostpet = LostPet.build({
 		name,
 		userId,
+		lat,
+		lng,
 		algoliaObjectID,
 	});
 
@@ -111,7 +113,6 @@ async function userLostPetCreate(data) {
 }
 
 async function userLostPetUpdate(update, petId, userId) {
-	console.log("user lost pet update", update);
 	const lostpet = await LostPet.findByPk(petId);
 	if (!lostpet) {
 		throw new Error("la mascota no existe");
@@ -124,6 +125,7 @@ async function userLostPetUpdate(update, petId, userId) {
 	}
 
 	delete update.pictureURI;
+
 	if (update.lat & update.lng) {
 		update._geoloc = { lng: update.lng, lat: update.lat };
 	}
@@ -133,6 +135,8 @@ async function userLostPetUpdate(update, petId, userId) {
 		petId,
 		objectID: lostpet.get("algoliaObjectID"),
 	});
+
+	delete update._geoloc;
 
 	const lostpetUpdate = await LostPet.update(
 		{ ...update },

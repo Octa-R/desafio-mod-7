@@ -22,6 +22,7 @@ class ReportarMascotaPage extends HTMLElement {
 			Router.go("/login");
 		}
 		this.selectedCoords = [0, 0];
+		cs.currentPosition || state.setCurrentPosition();
 	}
 
 	connectedCallback() {
@@ -139,6 +140,7 @@ class ReportarMascotaPage extends HTMLElement {
 				lng: this.selectedCoords[0],
 				pictureURI: this.file.dataURL,
 			};
+			// console.log(data);
 			state
 				.reportPet(data)
 				.then((res) => {

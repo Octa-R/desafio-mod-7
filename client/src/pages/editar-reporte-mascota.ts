@@ -13,9 +13,12 @@ class EditarReportePage extends HTMLElement {
 	map!: Map;
 	geocoder!: MapboxGeocoder;
 	selectedCoords: { lng: number; lat: number };
+	petCoords: { lng: number; lat: number };
 	petId: string;
 	petName = "";
+	newPetName = "";
 	pictureUrl = "";
+	newPicture = "";
 	constructor() {
 		super();
 		const cs = state.getState();
@@ -27,16 +30,17 @@ class EditarReportePage extends HTMLElement {
 			Router.go("/login");
 		}
 		this.selectedCoords = { lng: 0, lat: 0 };
+		this.petCoords = { lng: 0, lat: 0 };
+		cs.currentPosition || state.setCurrentPosition();
 	}
 
 	connectedCallback() {
 		this.getDataAndRender();
 	}
 	async getDataAndRender() {
-		console.log("asdas");
 		const pet: any = await state.getReportedPetData(this.petId);
 		this.petName = pet.name;
-		this.selectedCoords = { lng: pet.lng, lat: pet.lat };
+		this.petCoords = { lng: pet.lng, lat: pet.lat };
 		this.pictureUrl = await urlToBase64(pet.pictureUrl);
 		this.render();
 	}
@@ -50,7 +54,7 @@ class EditarReportePage extends HTMLElement {
 
 	configureMapBox() {
 		//obtengo coordenadas de la mascota perdida
-		const { lng, lat } = this.selectedCoords;
+		const { lng, lat } = this.petCoords;
 		// centro el mapa en la posicion
 		// de la mascota
 		this.map = new mapboxgl.Map({
@@ -127,7 +131,7 @@ class EditarReportePage extends HTMLElement {
 
 	listeners() {
 		this.dropzone.on("addedfile", (file: any) => {
-			this.file = file;
+			this.newPicture = file;
 			const dropzone = this.querySelector("#dropzone");
 			dropzone!.innerHTML = "";
 			dropzone?.append(file.previewElement);
@@ -136,8 +140,7 @@ class EditarReportePage extends HTMLElement {
 		this.dropzone.on("removedfile", () => {
 			const dropzone = this.querySelector("#dropzone");
 			dropzone!.innerHTML = `
-			<div class="absolute inset-0 bg-white  bg-opacity-50">
-      			</div>
+			<div class="absolute inset-0 bg-white  bg-opacity-50"></div>
       		<div class="flex items-center justify-center text-gray-700 text-5xl font-bold h-full w-full">
         		+
       		</div>`;
@@ -145,20 +148,40 @@ class EditarReportePage extends HTMLElement {
 
 		this.querySelector("#report-form")!.addEventListener("submit", (e: any) => {
 			e.preventDefault();
-			const name = e.target.name.value;
-			if (!this.pictureUrl || !name) {
-				console.error("faltan completar datos");
-				return;
-			}
-			const data = {
-				name,
-				lat: this.selectedCoords.lat,
-				lng: this.selectedCoords.lng,
-				pictureURI: this.pictureUrl,
+			const formData = new FormData(
+				this.querySelector<HTMLFormElement>("#report-form")!
+			);
+
+			const data: any = {
 				petId: this.petId,
 			};
+
+			const name = formData.get("name");
+
+			if (name !== this.petName) {
+				data.name = name;
+			}
+
+			if (this.selectedCoords.lat !== 0) {
+				data.lat = this.selectedCoords.lat;
+				data.lng = this.selectedCoords.lng;
+			}
+
+			if (this.newPicture !== "") {
+				data.pictureURI = this.newPicture;
+			}
+			console.log(data);
+			if (
+				this.newPicture === "" &&
+				name === this.petName &&
+				this.selectedCoords.lat === 0
+			) {
+				console.log("no hay cambios");
+				return;
+			}
 			state.updateLostPetReport(data).then((res) => {
 				console.log("se updateo con exito", res);
+				Router.go("/mis-mascotas-reportadas");
 			});
 		});
 

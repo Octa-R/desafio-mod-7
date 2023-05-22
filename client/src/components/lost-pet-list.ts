@@ -19,7 +19,7 @@ class List extends HTMLElement {
 	}
 
 	listeners() {
-		this.querySelector(".list")?.addEventListener("report", (e: any) => {
+		this.querySelector(".list")?.addEventListener("report", () => {
 			//mostrar modal de reportar mascota como vista
 		});
 	}

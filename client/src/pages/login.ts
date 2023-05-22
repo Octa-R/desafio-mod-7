@@ -1,32 +1,26 @@
 import { Router } from "@vaadin/router";
 import { state } from "../state";
 class LoginPage extends HTMLElement {
-  constructor() {
-    super();
-  }
+	constructor() {
+		super();
+	}
 
-  connectedCallback() {
-    this.render();
-  }
-  addSubmitListener() {
-
-    const form = <HTMLFormElement>this.querySelector('#login-form');
-    form?.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const email = this.querySelector<HTMLInputElement>("#email")?.value;
-      const password = this.querySelector<HTMLInputElement>("#password")?.value;
-      const res = await state.signin({ email, password })
-      console.log("respuesta de signin", res)
-
-      if (res) {
-        Router.go("/")
-      } else {
-        const cs = state.getState()
-      }
-    });
-  }
-  render() {
-    this.innerHTML = `
+	connectedCallback() {
+		this.render();
+	}
+	addSubmitListener() {
+		const form = <HTMLFormElement>this.querySelector("#login-form");
+		form?.addEventListener("submit", (e) => {
+			e.preventDefault();
+			const email = this.querySelector<HTMLInputElement>("#email")?.value;
+			const password = this.querySelector<HTMLInputElement>("#password")?.value;
+			state.signin({ email, password }).then(() => {
+				Router.go("/");
+			});
+		});
+	}
+	render() {
+		this.innerHTML = `
     <nav-bar></nav-bar>
     <div class="container mx-auto px-12 h-screen flex flex-col justify-center content-center py-16">
 
@@ -67,8 +61,8 @@ class LoginPage extends HTMLElement {
     </div>
     </div>
     `;
-    this.addSubmitListener()
-  }
+		this.addSubmitListener();
+	}
 }
 
-export { LoginPage }
+export { LoginPage };
